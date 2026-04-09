@@ -11,7 +11,10 @@ class ProductController extends Controller
     {
         $products = Product::with('category', 'supplier')->get();
 
-        return response()->json($products, 200);
+        return response()->json([
+            'data' => $products,
+            'total' => $products->count()
+        ], 200);
     }
 
     public function show($id)
