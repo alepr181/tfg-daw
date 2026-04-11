@@ -3,43 +3,113 @@
     Productos disponibles
   </h2>
 
-  <div class="overflow-x-auto">
-    <table class="w-full border-collapse text-sm">
-      <thead>
-        <tr class="bg-gray-100 text-left text-gray-600">
-          <th class="p-3">Producto</th>
-          <th class="p-3">Precio</th>
-          <th class="p-3">Stock</th>
-          <th class="p-3 text-center">Acción</th>
-        </tr>
-      </thead>
+  @if (productsResource.isLoading()) {
+    <div class="flex min-h-[320px] flex-col items-center justify-center gap-4">
+      <div
+        class="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-blue-500"
+        aria-hidden="true"
+      ></div>
 
-      <tbody>
-        @for (product of products(); track product.id) {
+      <div class="space-y-1 text-center">
+        <p class="text-sm font-medium text-gray-700">Cargando productos...</p>
+        <p class="text-xs text-gray-500">
+          Espera un momento mientras se obtiene la información.
+        </p>
+      </div>
+    </div>
+  } @else if (productsResource.error()) {
+    <div class="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
+      <div
+        class="flex h-14 w-14 items-center justify-center rounded-full bg-red-100"
+        aria-hidden="true"
+      >
+        <svg
+          class="h-7 w-7 text-red-600"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </div>
 
-
-          <tr class="border-t hover:bg-gray-50">
-            <td class="p-3">{{ product.name }}</td>
-            <td class="p-3">{{ product.price }}€</td>
-            <td class="p-3">{{ product.stock }}</td>
-
-            <td class="p-3 text-center">
-              <button
-                type="button"
-                class="rounded-lg bg-blue-600 px-3 py-1.5 text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Añadir
-              </button>
-            </td>
+      <div class="space-y-1">
+        <p class="text-sm font-semibold text-red-700">
+          No se han podido cargar los productos
+        </p>
+        <p class="max-w-sm text-xs text-gray-500">
+          Ha ocurrido un problema al conectar con el servidor. Inténtalo de nuevo
+          en unos segundos.
+        </p>
+      </div>
+    </div>
+  } @else {
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="bg-gray-100 text-left text-gray-600">
+            <th class="p-3">Producto</th>
+            <th class="p-3">Precio</th>
+            <th class="p-3">Stock</th>
+            <th class="p-3 text-center">Acción</th>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="4" class="p-4 text-center text-gray-500">
-              No hay productos disponibles.
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+        </thead>
+
+        <tbody>
+          @for (product of products(); track product.id) {
+            <tr class="border-t border-gray-100 hover:bg-gray-50">
+              <td class="p-3 font-medium text-gray-800">{{ product.name }}</td>
+              <td class="p-3 text-gray-700">{{ product.price }}€</td>
+              <td class="p-3 text-gray-700">{{ product.stock }}</td>
+
+              <td class="p-3 text-center">
+                <button
+                  type="button"
+                  class="rounded-lg bg-blue-600 px-3 py-1.5 text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Añadir
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="p-10 text-center">
+                <div class="flex flex-col items-center justify-center gap-2">
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="h-6 w-6 text-gray-400"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M19 6l-1 14H6L5 6"></path>
+                    </svg>
+                  </div>
+
+                  <p class="text-sm font-medium text-gray-700">
+                    No hay productos disponibles
+                  </p>
+                  <p class="text-xs text-gray-500">
+                    Cuando haya productos en el sistema aparecerán aquí.
+                  </p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </div>
