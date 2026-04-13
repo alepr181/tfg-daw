@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ProductList } from '../../../components/user/products/product-list/product-list';
 import { ProductSearch } from '../../../components/user/products/product-search/product-search';
 import { Cart } from '../../../components/user/cart/cart';
@@ -9,4 +9,12 @@ import { Cart } from '../../../components/user/cart/cart';
   templateUrl: './cashier-page.html',
   styleUrl: './cashier-page.css',
 })
-export class CashierPage {}
+export class CashierPage {
+
+  readonly searchTerm = signal('');
+
+  onSearchChange(value: string) { 
+    this.searchTerm.set(value)
+  }
+
+}

@@ -75,39 +75,53 @@
                 </button>
               </td>
             </tr>
-          } @empty {
-            <tr>
-              <td colspan="4" class="p-10 text-center">
-                <div class="flex flex-col items-center justify-center gap-2">
-                  <div
-                    class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100"
-                    aria-hidden="true"
-                  >
-                    <svg
-                      class="h-6 w-6 text-gray-400"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M3 6h18"></path>
-                      <path d="M8 6V4h8v2"></path>
-                      <path d="M19 6l-1 14H6L5 6"></path>
-                    </svg>
-                  </div>
+} @empty {
+  <tr>
+    <td colspan="4" class="p-10 text-center">
+      <div class="flex flex-col items-center justify-center gap-3">
 
-                  <p class="text-sm font-medium text-gray-700">
-                    No hay productos disponibles
-                  </p>
-                  <p class="text-xs text-gray-500">
-                    Cuando haya productos en el sistema aparecerán aquí.
-                  </p>
-                </div>
-              </td>
-            </tr>
-          }
+        <div
+          class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100"
+          aria-hidden="true"
+        >
+          <svg
+            class="h-7 w-7 text-gray-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+
+            <line x1="8" y1="8" x2="14" y2="14"></line>
+            <line x1="14" y1="8" x2="8" y2="14"></line>
+          </svg>
+        </div>
+
+        <!-- Texto dinámico -->
+        @if (searchTerm()) {
+          <p class="text-sm font-medium text-gray-700">
+            No se han encontrado productos
+          </p>
+          <p class="text-xs text-gray-500">
+            ¿Has escrito bien el nombre?
+          </p>
+        } @else {
+          <p class="text-sm font-medium text-gray-700">
+            No hay productos disponibles
+          </p>
+          <p class="text-xs text-gray-500">
+            Cuando haya productos en el sistema aparecerán aquí.
+          </p>
+        }
+
+      </div>
+    </td>
+  </tr>
+}
         </tbody>
       </table>
     </div>

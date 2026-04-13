@@ -11,9 +11,24 @@ import { ProductServiceAbstract } from './product.service.abstract';
 export class ProductService extends ProductServiceAbstract {
   #productsSignal = signal<ProductInterface[]>([]);
   products = this.#productsSignal.asReadonly();
-  #httpClient = inject(HttpClient)
+  #httpClient = inject(HttpClient);
+  readonly #searchTerm = signal("")
 
+  setSearchTerm(value: string) {
+    this.#searchTerm.set(value)
+  }
 
+  readonly filteredProducts = computed(() => {
+  const term = this.#searchTerm().trim().toLowerCase();
+
+  if (!term) {
+    return this.#productsSignal();
+  }
+
+  return this.#productsSignal().filter((product) =>
+    product.name.toLowerCase().includes(term)
+  );
+});
 
   #load(): Observable<{ data: ProductInterface[]; total: number }> {
       return this.#httpClient

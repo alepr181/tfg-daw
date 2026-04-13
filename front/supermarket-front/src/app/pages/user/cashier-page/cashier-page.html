@@ -8,9 +8,9 @@
     <div class="xl:col-span-2">
       <div class="space-y-8">
         <div class="mb-6">
-        <app-product-search></app-product-search>
+        <app-product-search (searchChange)="onSearchChange($event)"></app-product-search>
         </div>
-        <app-product-list></app-product-list>
+        <app-product-list [searchTerm]="searchTerm()"></app-product-list>
       </div>
     </div>
 

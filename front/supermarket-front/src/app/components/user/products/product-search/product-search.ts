@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-product-search',
@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
 })
 export class ProductSearch {
 
+  searchChange = output<string>();
   
 }
