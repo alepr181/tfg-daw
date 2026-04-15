@@ -1,9 +1,12 @@
 <div class="space-y-6">
-  <!-- CARRITO -->
   <div class="rounded-2xl bg-white p-4 shadow">
     <h2 class="mb-4 text-lg font-semibold text-gray-800">
       Carrito
     </h2>
+
+    <div class="mb-3 text-sm text-gray-500">
+      Productos en carrito: {{ totalItems() }}
+    </div>
 
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -18,143 +21,100 @@
         </thead>
 
         <tbody>
-          <tr class="border-t">
-            <td class="p-2">Producto A</td>
+          @for (item of items(); track item.productId) {
+            <tr class="border-t">
+              <td class="p-2">{{ item.name }}</td>
 
-            <td class="p-2">
-              <div class="flex items-center justify-center gap-2">
+              <td class="p-2">
+                <div class="flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    aria-label="Reducir cantidad"
+                    class="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-sm font-bold text-gray-700 transition hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    (click)="decreaseQuantity(item.productId)"
+                  >
+                    −
+                  </button>
+
+                  <span class="min-w-[24px] text-center font-medium">
+                    {{ item.quantity }}
+                  </span>
+
+                  <button
+                    type="button"
+                    aria-label="Aumentar cantidad"
+                    class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    (click)="increaseQuantity(item.productId)"
+                  >
+                    +
+                  </button>
+                </div>
+              </td>
+
+              <td class="p-2">{{ item.price }}€</td>
+              <td class="p-2">{{ item.subtotal.toFixed(2) }}€</td>
+
+              <td class="p-2 text-center">
                 <button
                   type="button"
-                  aria-label="Reducir cantidad"
-                  class="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-sm font-bold text-gray-700 transition hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Eliminar producto del carrito"
+                  class="rounded bg-red-500 px-2 py-1 text-white transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  (click)="removeProduct(item.productId)"
                 >
-                  −
+                  ✕
                 </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="p-10 text-center">
+                <div class="flex flex-col items-center justify-center gap-3">
+                  <div
+                    class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="h-7 w-7 text-gray-400"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="8" cy="21" r="1"></circle>
+                      <circle cx="19" cy="21" r="1"></circle>
+                      <path d="M2.05 2.05h2l2.12 9.9a2 2 0 0 0 2 1.58h9.66a2 2 0 0 0 2-1.69l1.38-7.24H5.12"></path>
+                    </svg>
+                  </div>
 
-                <span class="min-w-[24px] text-center font-medium">1</span>
-
-                <button
-                  type="button"
-                  aria-label="Aumentar cantidad"
-                  class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  +
-                </button>
-              </div>
-            </td>
-
-            <td class="p-2">10.00€</td>
-            <td class="p-2">10.00€</td>
-
-            <td class="p-2 text-center">
-              <button
-                type="button"
-                aria-label="Eliminar producto del carrito"
-                class="rounded bg-red-500 px-2 py-1 text-white transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                ✕
-              </button>
-            </td>
-          </tr>
-
-          <tr class="border-t">
-            <td class="p-2">Producto B</td>
-
-            <td class="p-2">
-              <div class="flex items-center justify-center gap-2">
-                <button
-                  type="button"
-                  aria-label="Reducir cantidad"
-                  class="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-sm font-bold text-gray-700 transition hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  −
-                </button>
-
-                <span class="min-w-[24px] text-center font-medium">2</span>
-
-                <button
-                  type="button"
-                  aria-label="Aumentar cantidad"
-                  class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  +
-                </button>
-              </div>
-            </td>
-
-            <td class="p-2">25.50€</td>
-            <td class="p-2">51.00€</td>
-
-            <td class="p-2 text-center">
-              <button
-                type="button"
-                aria-label="Eliminar producto del carrito"
-                class="rounded bg-red-500 px-2 py-1 text-white transition hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                ✕
-              </button>
-            </td>
-          </tr>
+                  <p class="text-sm font-medium text-gray-700">
+                    El carrito está vacío
+                  </p>
+                  <p class="text-xs text-gray-500">
+                    Añade productos desde la lista de la izquierda.
+                  </p>
+                </div>
+              </td>
+            </tr>
+          }
         </tbody>
       </table>
     </div>
 
-    <!-- RESUMEN -->
     <div class="mt-5 space-y-4 border-t pt-4">
       <div class="space-y-2 text-sm">
         <p class="flex justify-between text-gray-700">
           <span>Subtotal:</span>
-          <span>61.00€</span>
-        </p>
-
-        <p class="flex justify-between text-gray-700">
-          <span>Descuento:</span>
-          <span>-0.00€</span>
+          <span>{{ subtotal().toFixed(2) }}€</span>
         </p>
 
         <p class="flex justify-between text-lg font-bold text-gray-900">
           <span>Total:</span>
-          <span>61.00€</span>
+          <span>{{ total().toFixed(2) }}€</span>
         </p>
       </div>
 
-      <!-- DESCUENTO -->
-      <div>
-        <label
-          for="descuento"
-          class="mb-2 block text-sm font-medium text-gray-700"
-        >
-          Descuento (% o €):
-        </label>
-
-        <input
-          id="descuento"
-          type="text"
-          placeholder="Ej: 10% o 5"
-          class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <!-- MÉTODO DE PAGO -->
-      <div>
-        <label
-          for="metodo-pago"
-          class="mb-2 block text-sm font-medium text-gray-700"
-        >
-          Método de pago:
-        </label>
-
-        <select
-          id="metodo-pago"
-          class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option>Seleccionar opción</option>
-          <option>Efectivo</option>
-          <option>Tarjeta</option>
-        </select>
-      </div>
-
-      <!-- BOTONES -->
       <div class="flex flex-col gap-3 md:flex-row">
         <button
           type="button"
@@ -166,8 +126,9 @@
         <button
           type="button"
           class="flex-1 rounded-lg bg-gray-600 py-2.5 text-white transition hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          (click)="clearCart()"
         >
-          Cancelar / Vaciar carrito
+          Vaciar carrito
         </button>
       </div>
     </div>
