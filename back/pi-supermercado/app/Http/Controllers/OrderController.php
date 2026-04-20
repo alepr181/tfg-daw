@@ -31,7 +31,7 @@ class OrderController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'status' => 'required|in:pending,paid,shipped,completed,cancelled',
+            'status' => 'required|in:pending,completed,cancelled',
             'payment_method' => 'required|string',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',

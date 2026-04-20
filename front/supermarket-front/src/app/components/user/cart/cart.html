@@ -115,12 +115,23 @@
         </p>
       </div>
 
+        <select
+          class="w-full rounded-lg border border-gray-300 px-3 py-2"
+          [value]="paymentMethod()"
+          (change)="setPaymentMethod(select.value)"
+          #select
+        >
+          <option value="cash">Efectivo</option>
+          <option value="card">Tarjeta</option>
+        </select>
+
       <div class="flex flex-col gap-3 md:flex-row">
         <button
           type="button"
           class="flex-1 rounded-lg bg-blue-600 py-2.5 text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          (click)="checkout()"
         >
-          Finalizar compra
+          Finalizar pedido
         </button>
 
         <button

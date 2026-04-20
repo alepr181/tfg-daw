@@ -1,5 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CartService } from '../../../shared/services/CartService/cart.service';
+import { OrderService } from '../../../shared/services/OrderService/order.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-cart',
@@ -9,11 +12,16 @@ import { CartService } from '../../../shared/services/CartService/cart.service';
 })
 export class Cart {
   readonly #cartService = inject(CartService);
+  readonly #orderService = inject(OrderService);
+  #snackBar = inject(MatSnackBar)
 
+
+  readonly paymentMethod = signal<'cash' | 'card'>('cash');
   readonly items = this.#cartService.items;
   readonly subtotal = this.#cartService.subtotal;
   readonly total = this.#cartService.total;
   readonly totalItems = this.#cartService.totalItems;
+
 
   increaseQuantity(productId: number): void {
     this.#cartService.increaseQuantity(productId);
@@ -30,4 +38,24 @@ export class Cart {
   clearCart(): void {
     this.#cartService.clearCart();
   }
+
+  setPaymentMethod(method: 'cash' | 'card'): void {
+  this.paymentMethod.set(method);
+}
+  checkout(): void {
+  const payload = this.#cartService.buildOrderPayload(2, 'cash');
+
+  this.#orderService.createOrder(payload).subscribe({
+    next: (order) => {
+      this.#snackBar.open(`Pedido creado con ID ${order.order.id}`, "OK");
+
+      this.#cartService.clearCart();
+    },
+    error: (error) => {
+      this.#snackBar.open('Error al crear pedido', "OK")
+    }
+  });
+
+  
+}
 }

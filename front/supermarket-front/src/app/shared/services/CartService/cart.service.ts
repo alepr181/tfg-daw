@@ -112,4 +112,16 @@ export class CartService {
   clearCart(): void {
     this.#itemsSignal.set([]);
   }
+
+  buildOrderPayload(userId: number, paymentMethod: string) {
+  return {
+    user_id: userId,
+    status: 'completed',
+    payment_method: paymentMethod,
+    items: this.#itemsSignal().map(item => ({
+      product_id: item.productId,
+      quantity: item.quantity
+    }))
+  };
+}
 }

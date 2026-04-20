@@ -8,6 +8,5 @@ export abstract class ProductServiceAbstract {
  //abstract add(ProductInterfaceNewSignal: Signal<ProductInterface>): ResourceRef<ProductInterface>;
   //abstract update(ProductInterfaceToUpdate: Signal<ProductInterface>): ResourceRef<ProductInterface>;;
   //abstract remove(ProductInterfaceToRemove: Signal<ProductInterface>): ResourceRef<ProductInterface>;
-  //abstract findAll(params?: { page: number; limit: number }): Observable<{ ProductInterfaces: ProductInterface[]; total: number }>;
   //abstract findOne(id: Signal<string>): ResourceRef<ProductInterface>;
 }
