@@ -16,7 +16,7 @@ export class Cart {
   #snackBar = inject(MatSnackBar)
 
 
-  readonly paymentMethod = signal<'cash' | 'card'>('cash');
+  readonly paymentMethod = signal<string>('cash');
   readonly items = this.#cartService.items;
   readonly subtotal = this.#cartService.subtotal;
   readonly total = this.#cartService.total;
@@ -39,11 +39,14 @@ export class Cart {
     this.#cartService.clearCart();
   }
 
-  setPaymentMethod(method: 'cash' | 'card'): void {
-  this.paymentMethod.set(method);
+  setPaymentMethod(method: string): void {
+    if (method === 'cash' || method == 'card') {
+      this.paymentMethod.set(method);
+    }
 }
+
   checkout(): void {
-  const payload = this.#cartService.buildOrderPayload(2, 'cash');
+  const payload = this.#cartService.buildOrderPayload(2, this.paymentMethod());
 
   this.#orderService.createOrder(payload).subscribe({
     next: (order) => {
