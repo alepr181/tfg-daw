@@ -1,7 +1,7 @@
 <form
 class="space-y-5"
 [formGroup]="loginForm"
-(ngSubmit)="submit()"
+(ngSubmit)="login()"
 novalidate
 >
 <div class="space-y-2">
@@ -16,12 +16,12 @@ novalidate
     autocomplete="email"
     placeholder="correo@ejemplo.com"
     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-    [class.border-red-500]="showEmailErrors()"
-    [attr.aria-invalid]="showEmailErrors()"
-    [attr.aria-describedby]="showEmailErrors() ? 'email-error' : null"
+    [class.border-red-500]="emailControl.invalid && (emailControl.touched || emailControl.dirty)"
+    [attr.aria-invalid]="emailControl.invalid && (emailControl.touched || emailControl.dirty)"
+    [attr.aria-describedby]="emailControl.invalid && (emailControl.touched || emailControl.dirty) ? 'email-error' : null"
     />
 
-    @if (showEmailErrors()) {
+    @if (emailControl.invalid && (emailControl.touched || emailControl.dirty)) {
     <p id="email-error" class="text-sm text-red-600">
         @if (emailControl.hasError('required')) {
         El correo es obligatorio.
@@ -44,26 +44,30 @@ novalidate
     autocomplete="current-password"
     placeholder="••••••••"
     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-    [class.border-red-500]="showPasswordErrors()"
-    [attr.aria-invalid]="showPasswordErrors()"
-    [attr.aria-describedby]="showPasswordErrors() ? 'password-error' : null"
+    [class.border-red-500]="passwordControl.invalid && (passwordControl.touched || passwordControl.dirty)"
+    [attr.aria-invalid]="passwordControl.invalid && (passwordControl.touched || passwordControl.dirty)"
+    [attr.aria-describedby]="passwordControl.invalid && (passwordControl.touched || passwordControl.dirty) ? 'password-error' : null"
     />
 
-    @if (showPasswordErrors()) {
+    @if (passwordControl.invalid && (passwordControl.touched || passwordControl.dirty)) {
     <p id="password-error" class="text-sm text-red-600">
         @if (passwordControl.hasError('required')) {
         La contraseña es obligatoria.
-        } @else if (passwordControl.hasError('minlength')) {
-        Debe tener al menos 6 caracteres.
         }
     </p>
     }
 </div>
 
+@if (message !== '') {
+    <p class="text-sm text-red-600" aria-live="polite">
+    {{ message }}
+    </p>
+}
+
 <button
     type="submit"
     class="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
-    [disabled]="isSubmitDisabled()"
+    [disabled]="isLoading() || loginForm.invalid"
 >
     @if (isLoading()) {
     Entrando...

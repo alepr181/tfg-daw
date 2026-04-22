@@ -18,11 +18,10 @@ Route::apiResource('products', ProductController::class);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('suppliers', SupplierController::class);
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me', [AuthController::class, 'me']);
-
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/me', [AuthController::class, 'me']);
     Route::apiResource('users', UserController::class);
 });

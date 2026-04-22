@@ -11,17 +11,15 @@ import { AuthInterface } from '../../../shared/interfaces/auth.interface';
 export class LoginFormComponent {
   readonly #formBuilder = inject(FormBuilder);
 
-  readonly isLoading = input<boolean>(false);
-  readonly loginSubmit = output<AuthInterface>();
+  readonly isLoading = input(false);
+  readonly sendLogin = output<AuthInterface>();
 
-  readonly loginForm = this.#formBuilder.nonNullable.group({
+  public message = '';
+
+  public loginForm = this.#formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required]],
   });
-
-  readonly isSubmitDisabled = computed(
-    () => this.loginForm.invalid || this.isLoading(),
-  );
 
   get emailControl() {
     return this.loginForm.controls.email;
@@ -31,20 +29,14 @@ export class LoginFormComponent {
     return this.loginForm.controls.password;
   }
 
-  showEmailErrors(): boolean {
-    return this.emailControl.invalid && (this.emailControl.touched || this.emailControl.dirty);
-  }
-
-  showPasswordErrors(): boolean {
-    return this.passwordControl.invalid && (this.passwordControl.touched || this.passwordControl.dirty);
-  }
-
-  submit(): void {
+  login(): void {
     if (this.loginForm.invalid) {
+      this.message = 'Revisa los campos del formulario';
       this.loginForm.markAllAsTouched();
       return;
     }
 
-    this.loginSubmit.emit(this.loginForm.getRawValue());
+    this.message = '';
+    this.sendLogin.emit(this.loginForm.getRawValue());
   }
 }
