@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { AuthInterface, AuthResponseInterface } from '../../interfaces/auth.interface';
 import { HttpClient } from '@angular/common/http';
 import { TokenStorageService } from '../TokenStorageService/token-storage.service';
@@ -14,14 +14,15 @@ export class AuthService {
   readonly #httpClient = inject(HttpClient);
   readonly #tokenStorageService = inject(TokenStorageService);
 
-  login(user: AuthInterface): Observable<{ token: string }> {
-    return this.#httpClient.post<AuthResponseInterface>(`${this.API_ENDPOINT}/login`, user)
-    .pipe(
-      map((resp: any) => {
-        this.#tokenStorageService.token = resp.token;
-        return resp;
-      }));
-  }
+  login(user: AuthInterface): Observable<AuthResponseInterface> {
+    return this.#httpClient
+      .post<AuthResponseInterface>(`${this.API_ENDPOINT}/login`, user)
+      .pipe(
+        tap((resp) => {
+          this.#tokenStorageService.token = resp.token;
+          this.#tokenStorageService.userData = resp.user;
+        }),
+      )}; 
 
   logout(): void {
     this.#tokenStorageService.logout();
