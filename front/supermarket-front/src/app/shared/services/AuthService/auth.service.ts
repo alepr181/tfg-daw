@@ -3,6 +3,7 @@ import { map, Observable, tap } from 'rxjs';
 import { AuthInterface, AuthResponseInterface } from '../../interfaces/auth.interface';
 import { HttpClient } from '@angular/common/http';
 import { TokenStorageService } from '../TokenStorageService/token-storage.service';
+import { UserInterface } from '../../interfaces/user-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,16 @@ export class AuthService {
           this.#tokenStorageService.userData = resp.user;
         }),
       )}; 
-
+  
+  checkSession(): Observable<UserInterface> {
+    return this.#httpClient
+      .get<UserInterface>(`${this.API_ENDPOINT}/me`)
+      .pipe(
+        tap((user) => {
+          this.#tokenStorageService.userData = user;
+        }),
+      );
+  }
   logout(): void {
     this.#tokenStorageService.logout();
   }

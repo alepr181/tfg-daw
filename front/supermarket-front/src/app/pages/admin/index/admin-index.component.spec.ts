@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminIndexComponent } from './admin-index.component';
+import { AdminIndexComponent } from './admin-index.component/admin-index.component';
 
 describe('AdminIndexComponent', () => {
   let component: AdminIndexComponent;

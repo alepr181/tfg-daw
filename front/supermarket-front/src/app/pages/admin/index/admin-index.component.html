@@ -1,0 +1,44 @@
+<section class="min-h-dvh bg-slate-100">
+<div class="grid min-h-dvh grid-cols-[16rem_1fr]">
+    <aside class="border-r border-slate-200 bg-white px-4 py-6">
+    <div class="mb-8">
+        <h1 class="text-xl font-bold text-slate-900">
+        Supermarket Admin
+        </h1>
+        <p class="mt-1 text-sm text-slate-500">
+        Panel de gestión
+        </p>
+    </div>
+
+    <nav class="space-y-2" aria-label="Navegación de administración">
+        <a
+        routerLink="/admin/products"
+        routerLinkActive="bg-slate-900 text-white"
+        class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+        >
+        Productos
+        </a>
+
+        <a
+        routerLink="/admin/categories"
+        routerLinkActive="bg-slate-900 text-white"
+        class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+        >
+        Categorías
+        </a>
+
+        <a
+        routerLink="/admin/suppliers"
+        routerLinkActive="bg-slate-900 text-white"
+        class="block rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+        >
+        Proveedores
+        </a>
+    </nav>
+    </aside>
+
+    <main class="min-w-0 p-6">
+    <router-outlet />
+    </main>
+</div>
+</section>

@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TokenStorageService } from './shared/services/TokenStorageService/token-storage.service';
+import { AuthService } from './shared/services/AuthService/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +10,18 @@ import { RouterOutlet } from '@angular/router';
   template: '<router-outlet />',
 })
 export class App {
-  protected readonly title = signal('supermarket-front');
+  readonly #authService = inject(AuthService);
+  readonly #tokenStorageService = inject(TokenStorageService);
+
+    constructor() {
+    if (!this.#tokenStorageService.token) {
+      return;
+    }
+
+    this.#authService.checkSession().subscribe({
+      error: () => {
+        this.#tokenStorageService.logout();
+      }
+    });
+  }
 }

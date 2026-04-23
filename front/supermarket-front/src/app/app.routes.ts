@@ -19,9 +19,37 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { role: 'admin' },
     loadComponent: () =>
-    import('./pages/admin/index/admin-index.component/admin-index.component').then(
+    import('./pages/admin/index/admin-index.component').then(
         (c) => c.AdminIndexComponent,
     ),
+    children: [
+{
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'products',
+},
+{
+    path: 'products',
+    loadComponent: () =>
+    import('./pages/admin/products/admin-products.component').then(
+        (c) => c.AdminProductsComponent,
+    ),
+},
+{
+    path: 'categories',
+    loadComponent: () =>
+    import('./pages/admin/categories/admin-categories.component').then(
+        (c) => c.AdminCategoriesComponent,
+    ),
+},
+{
+    path: 'suppliers',
+    loadComponent: () =>
+    import('./pages/admin/suppliers/admin-suppliers.component').then(
+        (c) => c.AdminSuppliersComponent,
+    ),
+    },
+],
 },
 {
     path: 'cashier',
@@ -29,7 +57,7 @@ export const routes: Routes = [
     data: { role: 'user' },
     loadComponent: () =>
     import('./pages/user/cashier-page/cashier-page').then(
-        (m) => m.CashierPage,
+        (c) => c.CashierPage,
     ),
 },
 {
