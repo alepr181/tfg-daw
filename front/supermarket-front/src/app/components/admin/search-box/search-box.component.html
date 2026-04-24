@@ -1,0 +1,22 @@
+    <div class="rounded-2xl bg-white p-4 shadow">
+    <form
+        role="search"
+        aria-label="Buscar productos"
+        class="flex flex-col gap-3 md:flex-row"
+    >
+        <label for="search" class="sr-only">
+        Buscar producto
+        </label>
+
+        <input
+        #searchInput
+        id="search"
+        type="search"
+        name="search"
+        [placeholder]="placeholder()"
+        aria-label="Buscar producto"
+        class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        (input)="searchChange.emit(searchInput.value)"
+        />
+    </form>
+    </div>

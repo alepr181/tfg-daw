@@ -1,0 +1,131 @@
+    <h2 mat-dialog-title class="px-6 pt-6 text-xl font-bold text-slate-900">
+    @if (data.product) {
+        Editar producto
+    } @else {
+        Añadir producto
+    }
+    </h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <mat-dialog-content class="p-6 space-y-4">
+        <label class="block space-y-2">
+        <span class="text-sm font-medium text-slate-700">Nombre</span>
+        <input
+            type="text"
+            formControlName="name"
+            placeholder="Nombre del producto"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        />
+
+        @if (form.controls.name.invalid && form.controls.name.touched) {
+            <p class="text-sm text-red-600">El nombre es obligatorio.</p>
+        }
+        </label>
+
+        <label class="block space-y-2">
+        <span class="text-sm font-medium text-slate-700">Código de barras</span>
+        <input
+            type="text"
+            formControlName="barcode"
+            placeholder="Código de barras"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        />
+
+        @if (form.controls.barcode.invalid && form.controls.barcode.touched) {
+            <p class="text-sm text-red-600">El código de barras es obligatorio.</p>
+        }
+        </label>
+
+        <div class="grid gap-4 md:grid-cols-2">
+        <label class="block space-y-2">
+            <span class="text-sm font-medium text-slate-700">Precio</span>
+            <input
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="price"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            />
+
+            @if (form.controls.price.invalid && form.controls.price.touched) {
+            <p class="text-sm text-red-600">Introduce un precio válido.</p>
+            }
+        </label>
+
+        <label class="block space-y-2">
+            <span class="text-sm font-medium text-slate-700">Stock</span>
+            <input
+            type="number"
+            min="0"
+            step="1"
+            formControlName="stock"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            />
+
+            @if (form.controls.stock.invalid && form.controls.stock.touched) {
+            <p class="text-sm text-red-600">Introduce un stock válido.</p>
+            }
+        </label>
+        </div>
+
+        <label class="block space-y-2">
+        <span class="text-sm font-medium text-slate-700">Categoría</span>
+
+        <select
+            formControlName="category_id"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        >
+            <option value="0">Selecciona una categoría</option>
+
+            @for (category of data.categories; track category.id) {
+            <option [value]="category.id">
+                {{ category.name }}
+            </option>
+            }
+        </select>
+
+        @if (form.controls.category_id.invalid && form.controls.category_id.touched) {
+            <p class="text-sm text-red-600">Selecciona una categoría.</p>
+        }
+        </label>
+
+        <label class="block space-y-2">
+        <span class="text-sm font-medium text-slate-700">Proveedor</span>
+
+        <select
+            formControlName="supplier_id"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        >
+            <option value="0">Selecciona un proveedor</option>
+
+            @for (supplier of data.suppliers; track supplier.id) {
+            <option [value]="supplier.id">
+                {{ supplier.name }}
+            </option>
+            }
+        </select>
+
+        @if (form.controls.supplier_id.invalid && form.controls.supplier_id.touched) {
+            <p class="text-sm text-red-600">Selecciona un proveedor.</p>
+        }
+        </label>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="gap-2">
+        <button
+        type="button"
+        class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+        (click)="close()"
+        >
+        Cancelar
+        </button>
+
+        <button
+        type="submit"
+        class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+        [disabled]="form.invalid"
+        >
+        Guardar
+        </button>
+    </mat-dialog-actions>
+    </form>
