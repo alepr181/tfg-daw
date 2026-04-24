@@ -20,7 +20,7 @@ export class App {
 
     this.#authService.checkSession().subscribe({
       error: () => {
-        this.#tokenStorageService.logout();
+        this.#authService.logout();
       }
     });
   }
