@@ -3,9 +3,14 @@ export interface OrderItemPayload {
     quantity: number;
 }
 
-export interface OrderPayload {
+export interface OrderPayloadCreateInterface {
     user_id: number;
     status: string;
     payment_method: string;
     items: OrderItemPayload[];
+}
+
+export interface OrderPayloadUpdateInterface {
+    id: number;
+    status: 'pending' | 'paid' | 'cancelled';
 }

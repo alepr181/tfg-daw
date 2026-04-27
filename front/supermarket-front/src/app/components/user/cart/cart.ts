@@ -48,7 +48,7 @@ export class Cart {
   checkout(): void {
   const payload = this.#cartService.buildOrderPayload(2, this.paymentMethod());
 
-  this.#orderService.createOrder(payload).subscribe({
+  this.#orderService.add(payload).subscribe({
     next: (order) => {
       this.#snackBar.open(`Pedido creado con ID ${order.order.id}`, "OK");
 

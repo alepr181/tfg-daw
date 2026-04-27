@@ -1,14 +1,15 @@
-import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, ResourceRef, signal } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
-import { ProductInterface } from '../../interfaces/product-interface';
-import { rxResource } from '@angular/core/rxjs-interop';
-import { ProductServiceAbstract } from './product.service.abstract';
+  import { HttpClient } from '@angular/common/http';
+  import { computed, inject, Injectable, ResourceRef, Signal, signal } from '@angular/core';
+  import { catchError, NEVER, Observable, tap, throwError } from 'rxjs';
+  import { ProductInterface } from '../../interfaces/product-interface';
+  import { rxResource } from '@angular/core/rxjs-interop';
+  import { ProductServiceAbstract } from './product.service.abstract';
+  import { ProductPayloadCreateInterface, ProductPayloadUpdateInterface } from '../../interfaces/product-payload.interface';
 
-@Injectable({
+  @Injectable({
   providedIn: 'root',
-})
-export class ProductService extends ProductServiceAbstract {
+  })
+  export class ProductService extends ProductServiceAbstract {
   #productsSignal = signal<ProductInterface[]>([]);
   products = this.#productsSignal.asReadonly();
   #httpClient = inject(HttpClient);
@@ -28,7 +29,7 @@ export class ProductService extends ProductServiceAbstract {
   return this.#productsSignal().filter((product) =>
     product.name.toLowerCase().includes(term)
   );
-});
+  });
 
   #load(): Observable<{ data: ProductInterface[]; total: number }> {
       return this.#httpClient
@@ -36,7 +37,7 @@ export class ProductService extends ProductServiceAbstract {
       .pipe(
         tap(result => this.#productsSignal.set(result.data)),
         catchError((error) => {
-          console.error('Failed to load weapons, error');
+          console.error('Failed to load products, error');
           return throwError(() => error);
         })
       );
@@ -48,5 +49,82 @@ export class ProductService extends ProductServiceAbstract {
     })
   };
 
+  #add(product: ProductPayloadCreateInterface): Observable<ProductInterface> {
+  return this.#httpClient
+    .post<ProductInterface>(this.API_ENDPOINT, product)
+    .pipe(
+      tap((newProduct) => {
+        this.#productsSignal.update((currentProducts) => [
+          ...currentProducts,
+          newProduct,
+        ]);
+      }),
+      catchError((error) => {
+        console.error('Failed to add product', error);
+        return throwError(() => error);
+      }),
+    );
+  }
+  add(
+  productNewSignal: Signal<ProductPayloadCreateInterface | undefined>,
+  ): ResourceRef<ProductInterface | undefined> {
+  return rxResource<ProductInterface, ProductPayloadCreateInterface | undefined>({
+    params: () => productNewSignal(),
+    stream: ({ params }) => {
+      if (params === undefined) {
+        return NEVER;
+      }
 
-}
+      return this.#add(params);
+    },
+  });
+  }
+
+  #update(product: ProductPayloadUpdateInterface): Observable<ProductInterface> {
+  return this.#httpClient
+    .put<ProductInterface>(`${this.API_ENDPOINT}/${product.id}`, product)
+    .pipe(
+      tap((updated) =>
+        this.#productsSignal.update((current) =>
+          current.map((p) => (p.id === updated.id ? updated : p))
+        )
+      ),
+      catchError((error) => {
+        console.error('Failed to update product', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  update(productSignal: Signal<ProductPayloadUpdateInterface | undefined>): ResourceRef<ProductInterface | undefined> {
+  return rxResource({
+    params: () => productSignal(),
+    stream: ({ params }) => (params ? this.#update(params) : NEVER),
+    defaultValue: undefined,
+  });
+  }
+
+  #remove(product: ProductInterface): Observable<ProductInterface> {
+  return this.#httpClient
+    .delete<ProductInterface>(`${this.API_ENDPOINT}/${product.id}`)
+    .pipe(
+      tap(() =>
+        this.#productsSignal.update((current) =>
+          current.filter((p) => p.id !== product.id)
+        )
+      ),
+        catchError((error) => {
+        console.error('Failed to delete product', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  remove(productSignal: Signal<ProductInterface | undefined>): ResourceRef<ProductInterface | undefined> {
+    return rxResource({
+      params: () => productSignal(),
+      stream: ({ params }) => (params ? this.#remove(params) : NEVER),
+      defaultValue: undefined,
+    });
+  }
+  }
