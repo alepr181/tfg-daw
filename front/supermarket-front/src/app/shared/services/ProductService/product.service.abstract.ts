@@ -1,9 +1,10 @@
 import { ResourceRef, Signal } from '@angular/core';
 import { ProductInterface } from '../../interfaces/product-interface';
 import { ProductPayloadCreateInterface, ProductPayloadUpdateInterface } from '../../interfaces/product-payload.interface';
+import { environment } from '../../../environments/environment';
 
 export abstract class ProductServiceAbstract {
-  readonly API_ENDPOINT = '${environment.apiUrl}/products';
+  readonly API_ENDPOINT = `${environment.apiUrl}/products`;
 
   abstract load(): ResourceRef<{
     data: ProductInterface[];
