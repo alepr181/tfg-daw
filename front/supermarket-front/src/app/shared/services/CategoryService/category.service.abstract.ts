@@ -5,10 +5,8 @@ import { CategoryInterface } from "../../interfaces/category.interface";
 export abstract class CategoryServiceAbstract {
 readonly API_ENDPOINT = `${environment.apiUrl}/categories`;
 
-abstract load(): ResourceRef<{
-    data: CategoryInterface[];
-    total: number;
-}>;
+    abstract load(): ResourceRef<CategoryInterface[]>;
+
 }
 
 

@@ -40,10 +40,7 @@ class UserController extends Controller
             'account_status' => $request->account_status,
         ]);
 
-        return response()->json([
-            'message' => 'Usuario creado correctamente',
-            'user' => $user
-        ], 201);
+        return response()->json($user, 201);
     }
 
     public function update(Request $request, $id)
@@ -71,10 +68,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return response()->json([
-            'message' => 'Usuario actualizado correctamente',
-            'user' => $user
-        ], 200);
+        return response()->json($user, 200);
     }
 
     public function destroy($id)

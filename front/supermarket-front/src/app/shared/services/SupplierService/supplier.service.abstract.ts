@@ -6,10 +6,7 @@ import { environment } from "../../../environments/environment";
 export abstract class SupplierServiceAbstract {
 readonly API_ENDPOINT = `${environment.apiUrl}/suppliers`;
 
-abstract load(): ResourceRef<{
-    data: SupplierInterface[];
-    total: number;
-}>;
+abstract load(): ResourceRef<SupplierInterface[]>;
 
 abstract add(
     supplierSignal: Signal<SupplierPayloadCreateInterface | null>

@@ -109,10 +109,7 @@ class OrderController extends Controller
             'status' => $request->status
         ]);
 
-        return response()->json([
-            'message' => 'Estado del pedido actualizado correctamente',
-            'order' => $order
-        ], 200);
+        return response()->json($order, 200);
     }
 
     /**

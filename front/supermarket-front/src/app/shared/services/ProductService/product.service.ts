@@ -1,6 +1,6 @@
   import { HttpClient } from '@angular/common/http';
   import { computed, inject, Injectable, ResourceRef, Signal, signal } from '@angular/core';
-  import { catchError, NEVER, Observable, tap, throwError } from 'rxjs';
+  import { catchError, EMPTY, NEVER, Observable, tap, throwError } from 'rxjs';
   import { ProductInterface } from '../../interfaces/product-interface';
   import { rxResource } from '@angular/core/rxjs-interop';
   import { ProductServiceAbstract } from './product.service.abstract';
@@ -72,7 +72,7 @@
     params: () => productNewSignal(),
     stream: ({ params }) => {
       if (params === undefined) {
-        return NEVER;
+        return EMPTY;
       }
 
       return this.#add(params);
@@ -99,7 +99,7 @@
   update(productSignal: Signal<ProductPayloadUpdateInterface | undefined>): ResourceRef<ProductInterface | undefined> {
   return rxResource({
     params: () => productSignal(),
-    stream: ({ params }) => (params ? this.#update(params) : NEVER),
+    stream: ({ params }) => (params ? this.#update(params) : EMPTY),
     defaultValue: undefined,
   });
   }
@@ -123,7 +123,7 @@
   remove(productSignal: Signal<ProductInterface | undefined>): ResourceRef<ProductInterface | undefined> {
     return rxResource({
       params: () => productSignal(),
-      stream: ({ params }) => (params ? this.#remove(params) : NEVER),
+      stream: ({ params }) => (params ? this.#remove(params) : EMPTY),
       defaultValue: undefined,
     });
   }

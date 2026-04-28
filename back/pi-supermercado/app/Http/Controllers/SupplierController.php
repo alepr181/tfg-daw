@@ -33,10 +33,7 @@ class SupplierController extends Controller
             'email' => $request->email,
         ]);
 
-        return response()->json([
-            'message' => 'Proveedor creado correctamente',
-            'supplier' => $supplier
-        ], 201);
+        return response()->json($supplier, 201);
     }
 
     public function update(Request $request, $id)
@@ -53,10 +50,7 @@ class SupplierController extends Controller
             'email' => $request->email,
         ]);
 
-        return response()->json([
-            'message' => 'Proveedor actualizado correctamente',
-            'supplier' => $supplier
-        ], 200);
+        return response()->json($supplier, 200);
     }
 
     public function destroy($id)

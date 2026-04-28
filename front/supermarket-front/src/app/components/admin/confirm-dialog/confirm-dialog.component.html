@@ -1,0 +1,27 @@
+<h2 mat-dialog-title class="px-6 pt-6 text-lg font-semibold text-slate-900">
+Confirmar acción
+</h2>
+
+<mat-dialog-content class="px-6 py-4">
+<p class="text-sm text-slate-600 leading-relaxed">
+    {{ data.message }}
+</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="gap-2 px-6 pb-6">
+<button
+    type="button"
+    (click)="close(false)"
+    class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+>
+    Cancelar
+</button>
+
+<button
+    type="button"
+    (click)="close(true)"
+    class="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
+>
+    Eliminar
+</button>
+</mat-dialog-actions>

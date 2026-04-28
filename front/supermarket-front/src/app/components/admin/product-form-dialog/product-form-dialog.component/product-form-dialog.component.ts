@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogActions, MatDialogContent } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogModule } from '@angular/material/dialog';
 import { ProductFormDialogData } from '../../../../shared/interfaces/product-form-dialog-data.interface';
-import { MatDialogHarness } from '@angular/material/dialog/testing';
 
 @Component({
   selector: 'app-product-form-dialog',
-  imports: [ReactiveFormsModule, MatDialogActions, MatDialogContent],
+  imports: [ReactiveFormsModule, MatDialogActions, MatDialogContent, MatDialogModule],
   templateUrl: './product-form-dialog.component.html',
   styleUrl: './product-form-dialog.component.css',
 })
@@ -18,7 +17,7 @@ export class ProductFormDialogComponent {
   readonly form = this.#formBuilder.nonNullable.group({
     name: [this.data.product?.name ?? '', Validators.required],
     barcode: [this.data.product?.barcode ?? '', Validators.required],
-    price: [Number(this.data.product?.price ?? 0), [Validators.required, Validators.min(0)]],
+    price: [Number(this.data.product?.price ?? 0), [Validators.required, Validators.min(0.01)]],
     stock: [this.data.product?.stock ?? 0, [Validators.required, Validators.min(0)]],
     category_id: [this.data.product?.category_id ?? 0, [Validators.required, Validators.min(1)]],
     supplier_id: [this.data.product?.supplier_id ?? 0, [Validators.required, Validators.min(1)]],

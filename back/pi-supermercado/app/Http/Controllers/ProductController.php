@@ -46,10 +46,7 @@ class ProductController extends Controller
 
         $product->load('category', 'supplier');
 
-        return response()->json([
-            'message' => 'Producto creado correctamente',
-            'product' => $product
-        ], 201);
+        return response()->json($product, 201);
     }
 
     public function update(Request $request, $id)
@@ -76,10 +73,7 @@ class ProductController extends Controller
 
         $product->load('category', 'supplier');
 
-        return response()->json([
-            'message' => 'Producto actualizado correctamente',
-            'product' => $product
-        ], 200);
+        return response()->json($product, 200);
     }
 
     public function destroy($id)

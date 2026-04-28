@@ -17,11 +17,11 @@ export class CategoryService extends CategoryServiceAbstract {
   readonly #categoriesSignal = signal<CategoryInterface[]>([]);
   readonly categories = this.#categoriesSignal.asReadonly();
 
-  #load(): Observable<{ data: CategoryInterface[]; total: number }> {
+  #load(): Observable<CategoryInterface[]> {
     return this.#http
-      .get<{ data: CategoryInterface[]; total: number }>(this.API_ENDPOINT)
+      .get<CategoryInterface[]>(this.API_ENDPOINT)
       .pipe(
-        tap((result) => this.#categoriesSignal.set(result.data)),
+        tap((result) => this.#categoriesSignal.set(result)),
         catchError((error) => {
           console.error('Failed to load categories', error);
           return throwError(() => error);
@@ -29,10 +29,10 @@ export class CategoryService extends CategoryServiceAbstract {
       );
   }
 
-  load(): ResourceRef<{ data: CategoryInterface[]; total: number }> {
+  load(): ResourceRef<CategoryInterface[]> {
     return rxResource({
       stream: () => this.#load(),
-      defaultValue: { data: [], total: 0 },
+      defaultValue: [],
     });
   }
 }

@@ -11,7 +11,8 @@
 
     <button
         type="button"
-        class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        class="cursor-pointer rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:bg-blue-300 disabled:hover:bg-blue-300 disabled:focus-visible:outline-blue-300"
+        [disabled]="categoriesResource.isLoading() || suppliersResource.isLoading() || categoriesResource.error() || suppliersResource.error()"
         (click)="addProduct()"
     >
         Añadir producto
@@ -19,6 +20,7 @@
     </header>
 
     <app-search-box
+    class="p-1"
     placeholder="Buscar productos..."
     (searchChange)="searchProducts($event)"
     />
@@ -45,6 +47,7 @@
                 <th class="px-4 py-3 font-semibold">Código</th>
                 <th class="px-4 py-3 font-semibold">Precio</th>
                 <th class="px-4 py-3 font-semibold">Stock</th>
+                <th class="px-4 py-3 font-semibold">Proveedor</th>
                 <th class="px-4 py-3 font-semibold">Categoría</th>
                 <th class="px-4 py-3 text-right font-semibold">Acciones</th>
             </tr>
@@ -70,6 +73,10 @@
                 </td>
 
                 <td class="px-4 py-3 text-slate-600">
+                    {{ getSupplierName(product) }}
+                </td>
+
+                <td class="px-4 py-3 text-slate-600">
                     {{ getCategoryName(product) }}
                 </td>
 
@@ -77,8 +84,9 @@
                     <div class="flex justify-end gap-2">
                     <button
                         type="button"
-                        class="cursor-pointer rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
+                        class="cursor-pointer rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700 disabled:border-slate-300 disabled:text-slate-300 disabled:hover:bg-transparent disabled:focus-visible:outline-slate-300 disabled:cursor-not-allowed"
                         aria-label="Editar producto"
+                        [disabled]="categoriesResource.isLoading() || suppliersResource.isLoading() || categoriesResource.error() || suppliersResource.error()"
                         (click)="editProduct(product)"
                     >
                         EDITAR
@@ -86,8 +94,9 @@
 
                     <button
                         type="button"
-                        class="cursor-pointer rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                        class="cursor-pointer rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:border-red-300 disabled:text-red-300 disabled:hover:bg-transparent disabled:focus-visible:outline-red-300 disabled:cursor-not-allowed"
                         aria-label="Eliminar producto"
+                        [disabled]="categoriesResource.isLoading() || suppliersResource.isLoading() || categoriesResource.error() || suppliersResource.error()"
                         (click)="deleteProduct(product)"
                     >
                         ELIMINAR

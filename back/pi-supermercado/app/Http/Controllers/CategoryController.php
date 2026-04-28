@@ -32,7 +32,6 @@ class CategoryController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Categoría creada correctamente',
             'category' => $category
         ], 201);
     }
@@ -50,7 +49,6 @@ class CategoryController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Categoría actualizada correctamente',
             'category' => $category
         ], 200);
     }

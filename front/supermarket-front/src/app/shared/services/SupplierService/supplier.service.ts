@@ -18,11 +18,11 @@ export class SupplierService extends SupplierServiceAbstract {
   readonly #suppliersSignal = signal<SupplierInterface[]>([]);
   readonly suppliers = this.#suppliersSignal.asReadonly();
 
-  #load(): Observable<{ data: SupplierInterface[]; total: number }> {
+  #load(): Observable<SupplierInterface[]> {
     return this.#http
-      .get<{ data: SupplierInterface[]; total: number }>(this.API_ENDPOINT)
+      .get<SupplierInterface[]>(this.API_ENDPOINT)
       .pipe(
-        tap((result) => this.#suppliersSignal.set(result.data)),
+        tap((result) => this.#suppliersSignal.set(result)),
         catchError((error) => {
           console.error('Failed to load suppliers', error);
           return throwError(() => error);
@@ -30,10 +30,10 @@ export class SupplierService extends SupplierServiceAbstract {
       );
   }
 
-  load(): ResourceRef<{ data: SupplierInterface[]; total: number }> {
+  load(): ResourceRef<SupplierInterface[]> {
     return rxResource({
       stream: () => this.#load(),
-      defaultValue: { data: [], total: 0 },
+      defaultValue: [],
     });
   }
 
