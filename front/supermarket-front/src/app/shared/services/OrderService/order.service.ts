@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, ResourceRef, Signal, signal } from '@angular/core';
-import { catchError, NEVER, Observable, tap, throwError } from 'rxjs';
-import { OrderInterface } from '../../interfaces/order-interface';
+import { computed, inject, Injectable, ResourceRef, Signal, signal } from '@angular/core';
+import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
+import { OrderInterface } from '../../interfaces/order.interface';
 import { OrderPayloadCreateInterface, OrderPayloadUpdateInterface } from '../../interfaces/order-payload.interface';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { OrderServiceAbstract } from './order.service.abstract';
@@ -15,12 +15,29 @@ export class OrderService extends OrderServiceAbstract {
 
   readonly #ordersSignal = signal<OrderInterface[]>([]);
   readonly orders = this.#ordersSignal.asReadonly();
+  readonly #searchTerm = signal('');
 
-  #load(): Observable<{ data: OrderInterface[]; total: number }> {
+  setSearchTerm(value: string): void {
+    this.#searchTerm.set(value);
+  }
+
+  readonly filteredOrders = computed(() => {
+    const term = this.#searchTerm().trim().toLowerCase();
+
+    if (!term) {
+      return this.#ordersSignal();
+    }
+
+    return this.#ordersSignal().filter((order) =>
+      order.id.toString().includes(term)
+    );
+  });
+
+  #load(): Observable<OrderInterface[]> {
   return this.#http
-    .get<{ data: OrderInterface[]; total: number }>(this.API_ENDPOINT)
+    .get<OrderInterface[]>(this.API_ENDPOINT)
     .pipe(
-      tap((result) => this.#ordersSignal.set(result.data)),
+      tap((result) => this.#ordersSignal.set(result )),
       catchError((error) => {
         console.error('Failed to load orders', error);
         return throwError(() => error);
@@ -28,10 +45,10 @@ export class OrderService extends OrderServiceAbstract {
     );
 }
 
-  load(): ResourceRef<{ data: OrderInterface[]; total: number }> {
+  load(): ResourceRef<OrderInterface[]> {
     return rxResource({
       stream: () => this.#load(),
-      defaultValue: { data: [], total: 0 },
+      defaultValue: [], 
     });
   }
 
@@ -60,12 +77,12 @@ export class OrderService extends OrderServiceAbstract {
 }
 
   updateStatus(
-    orderToUpdateSignal: Signal<OrderPayloadUpdateInterface | null>,
+    orderToUpdateSignal: Signal<OrderPayloadUpdateInterface | undefined>,
   ): ResourceRef<OrderInterface | undefined> {
-    return rxResource<OrderInterface, OrderPayloadUpdateInterface | null>({
+    return rxResource<OrderInterface, OrderPayloadUpdateInterface | undefined>({
       params: () => orderToUpdateSignal(),
       stream: ({ params }) =>
-        params === null ? NEVER : this.#updateStatus(params),
+        params === undefined ? EMPTY : this.#updateStatus(params),
     });
   }
 
@@ -86,14 +103,13 @@ export class OrderService extends OrderServiceAbstract {
   }
 
   remove(
-    orderToRemoveSignal: Signal<OrderInterface | null>,
+    orderToRemoveSignal: Signal<OrderInterface | undefined>,
   ): ResourceRef<OrderInterface | undefined> {
-    return rxResource<OrderInterface, OrderInterface | null>({
+    return rxResource<OrderInterface, OrderInterface | undefined>({
       params: () => orderToRemoveSignal(),
-      stream: ({ params }) => (params === null ? NEVER : this.#remove(params)),
+      stream: ({ params }) =>
+        params === undefined ? EMPTY : this.#remove(params),
     });
   }
 }
-
-
 
