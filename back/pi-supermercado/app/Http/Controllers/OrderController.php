@@ -75,7 +75,7 @@ class OrderController extends Controller
                 'total' => $total
             ]);
 
-            return $order->load('orderItems.product', 'user');
+            return $order->load('items.product', 'user');
         });
 
         return response()->json([

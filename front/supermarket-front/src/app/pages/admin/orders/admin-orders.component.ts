@@ -6,6 +6,8 @@ import { OrderInterface } from '../../../shared/interfaces/order.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmDialogComponent } from '../../../components/admin/confirm-dialog/confirm-dialog.component';
 import { SearchBoxComponent } from '../../../components/admin/search-box/search-box.component';
+import { OrderDetailDialogComponent } from '../../../components/admin/order-detail-dialog/order-detail-dialog.component';
+import { OrderDetailDialogData } from '../../../shared/interfaces/order-detai-dialog-data.interface';
 
 @Component({
   selector: 'app-admin-orders.component',
@@ -28,17 +30,7 @@ export class AdminOrdersComponent {
   readonly orderDeleteSignal = signal<OrderInterface | undefined>(undefined);
   readonly orderDeleteResource = this.#orderService.remove(this.orderDeleteSignal);
 
-  readonly STATUS_TYPES: Record<string, string> = {
-  pending: 'Pendiente',
-  completed: 'Completado',
-  cancelled: 'Cancelado',
-  paid: 'Pagado',
-};
 
-readonly PAYMENT_METHODS: Record<string, string> = {
-  card: 'Tarjeta',
-  cash: 'Efectivo',
-};
 
   constructor() {
     effect(() => {
@@ -56,8 +48,17 @@ readonly PAYMENT_METHODS: Record<string, string> = {
   }
 
   viewOrder(order: OrderInterface): void {
-    console.log('Ver pedido', order);
-  }
+    this.#dialog.open<OrderDetailDialogComponent, OrderDetailDialogData>(
+      OrderDetailDialogComponent,
+      {
+        width: '720px',
+        maxWidth: '100vw',
+        data: {
+          order
+        },
+      },
+    );
+}
 
   deleteOrder(order: OrderInterface): void {
     const dialogRef = this.#dialog.open(ConfirmDialogComponent, {
@@ -89,13 +90,15 @@ readonly PAYMENT_METHODS: Record<string, string> = {
   }).format(new Date(date));
 }
 
-formatStatus(status: string): string {
-  return this.STATUS_TYPES[status] ?? status;
-}
+  formatStatus(status: string): string {
+    return this.#orderService.formatStatus(status);
+  }
 
-formatPaymentMethod(method: string): string {
-  return this.PAYMENT_METHODS[method] ?? method;
-}
+  formatPaymentMethod(method: string): string {
+    return this.#orderService.formatPaymentMethod(method);
+  }
+
+
 
 }  
 

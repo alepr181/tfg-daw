@@ -21,6 +21,18 @@ export class OrderService extends OrderServiceAbstract {
     this.#searchTerm.set(value);
   }
 
+  readonly STATUS_TYPES: Record<string, string> = {
+    pending: 'Pendiente',
+    completed: 'Completado',
+    cancelled: 'Cancelado',
+    paid: 'Pagado',
+  };
+
+  readonly PAYMENT_METHODS: Record<string, string> = {
+    card: 'Tarjeta',
+    cash: 'Efectivo',
+  };
+
   readonly filteredOrders = computed(() => {
     const term = this.#searchTerm().trim().toLowerCase();
 
@@ -111,5 +123,13 @@ export class OrderService extends OrderServiceAbstract {
         params === undefined ? EMPTY : this.#remove(params),
     });
   }
+
+  formatStatus(status: string): string {
+  return this.STATUS_TYPES[status] ?? status;
+}
+
+  formatPaymentMethod(method: string): string {
+  return this.PAYMENT_METHODS[method] ?? method;
+}
 }
 

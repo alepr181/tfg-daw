@@ -21,4 +21,7 @@ import { environment } from '../../../environments/environment.dev';
     abstract remove(
         orderToRemoveSignal: Signal<OrderInterface | undefined>
     ): ResourceRef<OrderInterface | undefined>;
+
+    abstract formatStatus(status: string): string;
+    abstract formatPaymentMethod(method: string): string;
 }
