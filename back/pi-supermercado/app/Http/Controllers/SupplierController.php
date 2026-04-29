@@ -9,7 +9,7 @@ class SupplierController extends Controller
 {
     public function index()
     {
-        $suppliers = Supplier::with('products')->get();
+        $suppliers = Supplier::select('id', 'name', 'email')->get();
 
         return response()->json($suppliers, 200);
     }

@@ -1,4 +1,4 @@
-import { inject, Injectable, ResourceRef, signal, Signal } from '@angular/core';
+import { computed, inject, Injectable, ResourceRef, signal, Signal } from '@angular/core';
 import { SupplierServiceAbstract } from './supplier.service.abstract';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -17,6 +17,24 @@ export class SupplierService extends SupplierServiceAbstract {
 
   readonly #suppliersSignal = signal<SupplierInterface[]>([]);
   readonly suppliers = this.#suppliersSignal.asReadonly();
+
+  readonly #searchTerm = signal("")
+
+  setSearchTerm(value: string) {
+    this.#searchTerm.set(value)
+  }
+
+  readonly filteredSuppliers = computed(() => {
+  const term = this.#searchTerm().trim().toLowerCase();
+
+  if (!term) {
+    return this.#suppliersSignal();
+  }
+
+  return this.#suppliersSignal().filter((supplier) =>
+    supplier.name.toLowerCase().includes(term)
+  );
+  });
 
   #load(): Observable<SupplierInterface[]> {
     return this.#http
@@ -53,11 +71,11 @@ export class SupplierService extends SupplierServiceAbstract {
   }
 
   add(
-    supplierSignal: Signal<SupplierPayloadCreateInterface | null>,
+    supplierSignal: Signal<SupplierPayloadCreateInterface | undefined>,
   ): ResourceRef<SupplierInterface | undefined> {
-    return rxResource<SupplierInterface, SupplierPayloadCreateInterface | null>({
+    return rxResource<SupplierInterface, SupplierPayloadCreateInterface | undefined>({
       params: () => supplierSignal(),
-      stream: ({ params }) => (params === null ? NEVER : this.#add(params)),
+      stream: ({ params }) => (params === undefined ? NEVER : this.#add(params)),
     });
   }
 
@@ -82,11 +100,11 @@ export class SupplierService extends SupplierServiceAbstract {
   }
 
   update(
-    supplierSignal: Signal<SupplierPayloadUpdateInterface | null>,
+    supplierSignal: Signal<SupplierPayloadUpdateInterface | undefined>,
   ): ResourceRef<SupplierInterface | undefined> {
-    return rxResource<SupplierInterface, SupplierPayloadUpdateInterface | null>({
+    return rxResource<SupplierInterface, SupplierPayloadUpdateInterface | undefined>({
       params: () => supplierSignal(),
-      stream: ({ params }) => (params === null ? NEVER : this.#update(params)),
+      stream: ({ params }) => (params === undefined ? NEVER : this.#update(params)),
     });
   }
 
@@ -109,11 +127,11 @@ export class SupplierService extends SupplierServiceAbstract {
   }
 
   remove(
-    supplierSignal: Signal<SupplierInterface | null>,
+    supplierSignal: Signal<SupplierInterface | undefined>,
   ): ResourceRef<SupplierInterface | undefined> {
-    return rxResource<SupplierInterface, SupplierInterface | null>({
+    return rxResource<SupplierInterface, SupplierInterface | undefined>({
       params: () => supplierSignal(),
-      stream: ({ params }) => (params === null ? NEVER : this.#remove(params)),
+      stream: ({ params }) => (params === undefined ? NEVER : this.#remove(params)),
     });
   }
 }

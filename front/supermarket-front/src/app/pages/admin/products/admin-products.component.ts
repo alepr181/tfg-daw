@@ -31,13 +31,21 @@ export class AdminProductsComponent {
   readonly #supplierService = inject(SupplierService);
   readonly #matSnackBar = inject(MatSnackBar);
   readonly categoriesResource = this.#categoryService.load();
+
   readonly suppliersResource = this.#supplierService.load();
+  
   readonly categories = this.#categoryService.categories;
   readonly suppliers = this.#supplierService.suppliers;
+
+
   readonly productCreateSignal = signal<ProductPayloadCreateInterface | undefined>(undefined);
   readonly productCreateResource = this.#productService.add(this.productCreateSignal);
+
+
   readonly productUpdateSignal = signal<ProductPayloadUpdateInterface | undefined>(undefined);
   readonly productUpdateResource = this.#productService.update(this.productUpdateSignal);
+
+
   readonly productDeleteSignal = signal<ProductInterface | undefined>(undefined);
   readonly productDeleteResource = this.#productService.remove(this.productDeleteSignal);
 

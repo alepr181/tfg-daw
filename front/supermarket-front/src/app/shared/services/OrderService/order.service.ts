@@ -3,17 +3,16 @@ import { inject, Injectable, ResourceRef, Signal, signal } from '@angular/core';
 import { catchError, NEVER, Observable, tap, throwError } from 'rxjs';
 import { OrderInterface } from '../../interfaces/order-interface';
 import { OrderPayloadCreateInterface, OrderPayloadUpdateInterface } from '../../interfaces/order-payload.interface';
-import { environment } from '../../../environments/environment';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { OrderServiceAbstract } from './order.service.abstract';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OrderService {
+export class OrderService extends OrderServiceAbstract {
 
   readonly #http = inject(HttpClient);
 
-  private readonly API_ENDPOINT = '${environment.apiUrl}/orders';
   readonly #ordersSignal = signal<OrderInterface[]>([]);
   readonly orders = this.#ordersSignal.asReadonly();
 

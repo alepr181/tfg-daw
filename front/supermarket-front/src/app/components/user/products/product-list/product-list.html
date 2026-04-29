@@ -69,7 +69,8 @@
               <td class="p-3 text-center">
                 <button
                   type="button"
-                  class="rounded-lg bg-blue-600 px-3 py-1.5 text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  [disabled]="product.stock === 0"
+                  class="rounded-lg bg-blue-600 px-3 py-1.5 text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
                   (click)="addToCart(product)"
                 >
                   Añadir

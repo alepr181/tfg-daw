@@ -36,10 +36,17 @@ export const routes: Routes = [
     ),
 },
 {
-    path: 'categories',
+    path: 'users',
     loadComponent: () =>
-    import('./pages/admin/categories/admin-categories.component').then(
-        (c) => c.AdminCategoriesComponent,
+    import('./pages/admin/users/admin-users.component').then(
+        (c) => c.AdminUsersComponent,
+    ),
+},
+{
+    path: 'orders',
+    loadComponent: () =>
+    import('./pages/admin/orders/admin-orders.component').then(
+        (c) => c.AdminOrdersComponent,
     ),
 },
 {

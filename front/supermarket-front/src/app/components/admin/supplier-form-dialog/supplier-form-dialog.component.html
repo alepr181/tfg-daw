@@ -1,0 +1,59 @@
+<h2 mat-dialog-title class="px-6 pt-6 text-xl font-bold text-slate-900">
+@if (data.supplier) {
+    Editar proveedor
+} @else {
+    Añadir proveedor
+}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+<mat-dialog-content class="p-6 space-y-4">
+
+    <label class="block space-y-2">
+    <span class="text-sm font-medium text-slate-700">Nombre</span>
+    <input
+        type="text"
+        formControlName="name"
+        placeholder="Nombre del proveedor"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+    />
+
+    @if (form.controls.name.invalid && form.controls.name.touched) {
+        <p class="text-sm text-red-600">El nombre es obligatorio.</p>
+    }
+    </label>
+
+    <label class="block space-y-2">
+    <span class="text-sm font-medium text-slate-700">Email</span>
+    <input
+        type="email"
+        formControlName="email"
+        placeholder="Email del proveedor"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+    />
+
+    @if (form.controls.email.invalid && form.controls.email.touched) {
+        <p class="text-sm text-red-600">Introduce un email válido.</p>
+    }
+    </label>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="gap-2">
+    <button
+    type="button"
+    class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+    (click)="close()"
+    >
+    Cancelar
+    </button>
+
+    <button
+    type="submit"
+    class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+    [disabled]="form.invalid"
+    >
+    Guardar
+    </button>
+</mat-dialog-actions>
+</form>
