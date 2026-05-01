@@ -69,10 +69,10 @@ export class UserService extends UserServiceAbstract {
   }
 
   add(
-    userNewSignal: Signal<UserPayloadCreateInterface | undefined>,
+    userSignal: Signal<UserPayloadCreateInterface | undefined>,
   ): ResourceRef<UserInterface | undefined> {
     return rxResource<UserInterface, UserPayloadCreateInterface | undefined>({
-      params: () => userNewSignal(),
+      params: () => userSignal(),
       stream: ({ params }) => {
         if (params === undefined) {
           return EMPTY;
