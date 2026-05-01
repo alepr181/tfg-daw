@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { OrderDetailDialogData } from '../../../shared/interfaces/order-detai-dialog-data.interface';
+import { OrderDetailDialogData } from '../../../shared/interfaces/order-detail-dialog-data.interface';
 import { OrderService } from '../../../shared/services/OrderService/order.service';
+import { OrderPayloadUpdateInterface } from '../../../shared/interfaces/order-payload.interface';
 
 @Component({
   selector: 'app-order-detail-dialog.component',
@@ -37,4 +38,15 @@ export class OrderDetailDialogComponent {
   formatPaymentMethod(method: string): string {
     return this.#orderService.formatPaymentMethod(method);
   }
+
+  changeStatus(e: Event): void {
+  const status = (e.target as HTMLSelectElement)
+    .value as OrderPayloadUpdateInterface['status'];
+
+  this.data.updateStatus({
+    id: this.data.order.id,
+    status,
+  });
+
+}
 }

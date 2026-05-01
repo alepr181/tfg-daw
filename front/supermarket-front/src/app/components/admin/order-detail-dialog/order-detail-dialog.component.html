@@ -18,12 +18,21 @@ Pedido #{{ data.order.id }}
     </span>
     </p>
 
-    <p class="text-slate-600">
-    Estado:
-    <span class="font-medium text-slate-900">
-        {{ formatStatus(data.order.status) }}
-    </span>
-    </p>
+    <label class="block space-y-2 text-slate-600">
+    <span>Estado:</span>
+
+    <select
+        class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        [value]="data.order.status"
+        (change)="changeStatus($event)"
+        #statusSelect
+    >
+        <option value="pending">Pendiente</option>
+        <option value="paid">Pagado</option>
+        <option value="completed">Completado</option>
+        <option value="cancelled">Cancelado</option>
+    </select>
+    </label>
         <p class="text-slate-600">
         Método de pago:
         <span class="font-medium text-slate-900">

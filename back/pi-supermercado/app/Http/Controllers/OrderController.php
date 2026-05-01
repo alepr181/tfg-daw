@@ -97,17 +97,19 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) //Cambiar el estado del pedido
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'required|string'
-        ]);
-
         $order = Order::findOrFail($id);
 
-        $order->update([
-            'status' => $request->status
+        $request->validate([
+            'status' => 'required|in:pending,paid,cancelled,completed',
         ]);
+
+        $order->update([
+            'status' => $request->status,
+        ]);
+
+        $order->load(['user', 'items.product']);
 
         return response()->json($order, 200);
     }

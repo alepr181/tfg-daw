@@ -12,5 +12,5 @@ export interface OrderPayloadCreateInterface {
 
 export interface OrderPayloadUpdateInterface {
     id: number;
-    status: 'pending' | 'paid' | 'cancelled';
+    status: 'pending' | 'paid' | 'cancelled' | 'completed';
 }

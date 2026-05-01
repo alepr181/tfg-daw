@@ -7,7 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ConfirmDialogComponent } from '../../../components/admin/confirm-dialog/confirm-dialog.component';
 import { SearchBoxComponent } from '../../../components/admin/search-box/search-box.component';
 import { OrderDetailDialogComponent } from '../../../components/admin/order-detail-dialog/order-detail-dialog.component';
-import { OrderDetailDialogData } from '../../../shared/interfaces/order-detai-dialog-data.interface';
+import { OrderDetailDialogData } from '../../../shared/interfaces/order-detail-dialog-data.interface';
+import { OrderPayloadUpdateInterface } from '../../../shared/interfaces/order-payload.interface';
 
 @Component({
   selector: 'app-admin-orders.component',
@@ -29,6 +30,8 @@ export class AdminOrdersComponent {
 
   readonly orderDeleteSignal = signal<OrderInterface | undefined>(undefined);
   readonly orderDeleteResource = this.#orderService.remove(this.orderDeleteSignal);
+  readonly orderUpdateSignal = signal<OrderPayloadUpdateInterface | undefined>(undefined);
+  readonly orderUpdateResource = this.#orderService.updateStatus(this.orderUpdateSignal);
 
 
 
@@ -54,7 +57,10 @@ export class AdminOrdersComponent {
         width: '720px',
         maxWidth: '100vw',
         data: {
-          order
+          order,
+          updateStatus: (payload: OrderPayloadUpdateInterface) => {
+          this.orderUpdateSignal.set(payload);
+        }
         },
       },
     );
