@@ -1,0 +1,52 @@
+<form
+class="space-y-5"
+[formGroup]="twoFactorForm"
+(ngSubmit)="verify()"
+novalidate
+>
+<div class="space-y-2">
+<label for="code" class="block text-sm font-medium text-slate-700">
+    Código de verificación
+</label>
+
+<input
+    id="code"
+    type="text"
+    inputmode="numeric"
+    maxlength="6"
+    formControlName="code"
+    autocomplete="one-time-code"
+    placeholder="123456"
+    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-center text-xl font-semibold tracking-[0.35em] text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+    [class.border-red-500]="codeControl.invalid && (codeControl.touched || codeControl.dirty)"
+    [attr.aria-invalid]="codeControl.invalid && (codeControl.touched || codeControl.dirty)"
+    [attr.aria-describedby]="codeControl.invalid && (codeControl.touched || codeControl.dirty) ? 'code-error' : null"
+/>
+
+@if (codeControl.invalid && (codeControl.touched || codeControl.dirty)) {
+    <p id="code-error" class="text-sm text-red-600">
+    @if (codeControl.hasError('required')) {
+        El código es obligatorio.
+    }
+    </p>
+}
+</div>
+
+@if (message !== '') {
+    <p class="text-sm text-red-600" aria-live="polite">
+        {{ message }}
+    </p>
+}
+
+<button
+type="submit"
+class="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
+[disabled]="isLoading() || twoFactorForm.invalid"
+>
+@if (isLoading()) {
+    Verificando...
+} @else {
+    Verificar código
+}
+</button>
+</form>

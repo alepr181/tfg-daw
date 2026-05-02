@@ -9,11 +9,17 @@ export const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'login',
 },
-    {
+{
         path: 'login',
         canActivate: [guestGuard],
         loadComponent:() => import('./pages/login/login-page.component').then((c) => c.LoginPageComponent)
-    },
+},
+{
+    path: 'verify-2fa',
+    loadComponent: () =>
+        import('./pages/login/verify-two-factor.component/verify-two-factor.component')
+        .then((m) => m.VerifyTwoFactorPageComponent),
+},
 {
     path: 'admin',
     canActivate: [authGuard, roleGuard],

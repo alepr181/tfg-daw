@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
-import { AuthInterface, AuthResponseInterface } from '../../shared/interfaces/auth.interface';
+import { AuthInterface, AuthResponseInterface, LoginResponseInterface, TwoFactorRequiredResponseInterface } from '../../shared/interfaces/auth.interface';
 import { LoginFormComponent } from '../../components/login/login-form.component/login-form.component';
 
 @Component({
@@ -29,7 +29,7 @@ export class LoginPageComponent {
   readonly isSuccess = computed(() => this.loginResource.status() === 'resolved');
 
   readonly response = computed(
-    () => this.loginResource.value() as AuthResponseInterface | undefined,
+    () => this.loginResource.value() as LoginResponseInterface | undefined,
   );
 
   readonly showErrorEffect = effect(() => {
@@ -51,23 +51,28 @@ export class LoginPageComponent {
 
     const response = this.response();
 
-    if (!response?.user) {
+    if (!response) {
       return;
     }
 
-    this.#redirectByRole(response.user.role);
+    if (this.#isTwoFactorRequiredResponse(response)) {
+      void this.#router.navigate(['/verify-2fa'], {
+        queryParams: { email: response.email },
+      });
+
+      return;
+    }
+
+    void this.#router.navigate(['/']);
   });
 
   onLoginSubmit(payload: AuthInterface): void {
     this.loginPayload.set(payload);
   }
 
-  #redirectByRole(role: 'admin' | 'user'): void {
-    if (role === 'admin') {
-      void this.#router.navigate(['/admin']);
-      return;
-    }
-
-    void this.#router.navigate(['/cashier']);
+  #isTwoFactorRequiredResponse(
+    response: LoginResponseInterface,
+  ): response is TwoFactorRequiredResponseInterface {
+    return 'requires_2fa' in response && response.requires_2fa;
   }
 }

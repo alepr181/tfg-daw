@@ -1,0 +1,21 @@
+<section class="min-h-dvh bg-slate-100 px-6 py-8">
+<div class="mx-auto grid min-h-dvh max-w-md place-items-center">
+    <div class="w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
+    <header class="mb-6">
+        <h1 class="text-3xl font-bold tracking-tight text-slate-900">
+        Verificación 2FA
+        </h1>
+
+        <p class="mt-2 text-sm text-slate-600">
+        Introduce el código enviado a
+        <strong class="text-slate-900">{{ email() }}</strong>.
+        </p>
+    </header>
+
+    <app-verify-two-factor-form
+        [isLoading]="isLoading()"
+        (sendCode)="onVerifySubmit($event)"
+    />
+    </div>
+</div>
+</section>
