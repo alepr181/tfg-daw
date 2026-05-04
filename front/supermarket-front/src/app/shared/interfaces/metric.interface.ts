@@ -1,6 +1,5 @@
 export interface DashboardMetricsInterface {
     summary: SummaryInterface;
-    sales_trend: SalesTrendInterface[];
     top_products: TopProductInterface[];
     low_stock_products: LowStockProductInterface[];
     payment_methods: PaymentMethodInterface[];
@@ -13,12 +12,6 @@ export interface SummaryInterface {
     pending_orders: number;
     cancelled_orders: number;
     total_products: number;
-}
-
-export interface SalesTrendInterface {
-    date: string;
-    total: number;
-    orders_count: number;
 }
 
 export interface TopProductInterface {

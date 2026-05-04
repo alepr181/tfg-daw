@@ -1,1 +1,36 @@
-<p>payment-methods-metrics.component works!</p>
+<section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <header class="border-b border-slate-200 p-6">
+    <h2 class="text-lg font-semibold text-slate-900">Métodos de pago</h2>
+
+    <p class="mt-1 text-sm text-slate-600">Pedidos completados agrupados por método de pago.</p>
+    </header>
+    <div class="overflow-x-auto">
+    <table class="min-w-full border-collapse text-left text-sm">
+        <thead class="bg-slate-100 text-slate-700">
+            <tr>
+                <th class="px-4 py-3 font-semibold">Método</th>
+                <th class="px-4 py-3 font-semibold">Pedidos</th>
+                <th class="px-4 py-3 font-semibold">Facturación</th>
+            </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-200">
+            @for (method of paymentMethods(); track method.payment_method) {
+                <tr class="hover:bg-slate-50">
+                <td class="px-4 py-3 font-medium text-slate-900">
+                    {{ formatPaymentMethod(method.payment_method) }}
+                </td>
+
+                <td class="px-4 py-3 text-slate-600">
+                    {{ method.total_orders }}
+                </td>
+
+                <td class="px-4 py-3 font-medium text-slate-900">
+                    {{ (method.total_revenue) }} €
+                </td>
+                </tr>
+            }
+            </tbody>
+    </table>
+    </div>
+</section>

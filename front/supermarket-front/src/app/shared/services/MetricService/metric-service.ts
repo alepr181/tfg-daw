@@ -14,7 +14,7 @@ export class MetricService extends MetricServiceAbstract {
   
     getMetrics(): Observable<DashboardMetricsInterface> {
     return this.#http.get<DashboardMetricsInterface>(
-      `${this.API_URL}/metrics/dashboard`
+      `${this.API_URL}`
     );
   }
 

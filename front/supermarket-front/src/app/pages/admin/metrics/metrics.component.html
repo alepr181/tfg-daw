@@ -1,1 +1,39 @@
-<p>metrics.component works!</p>
+<section class="space-y-6">
+<header class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+    <div>
+    <h1 class="text-2xl font-bold text-slate-900">
+        Métricas
+    </h1>
+
+    <p class="mt-1 text-sm text-slate-600">
+        Consulta estadísticas de ventas, productos, stock y métodos de pago.
+    </p>
+    </div>
+</header>
+
+@if (metricsResource.isLoading()) {
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <p class="text-sm text-slate-600">
+        Cargando métricas...
+    </p>
+    </div>
+} @else if (metricsResource.error()) {
+    <div class="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
+    <p class="text-sm text-red-600">
+        No se pudieron cargar las métricas.
+    </p>
+    </div>
+} @else {
+    <app-summary-metrics [summary]="metrics().summary" />
+
+    <div class="grid gap-6 lg:grid-cols-2">
+
+    <app-payment-methods-metrics [paymentMethods]="metrics().payment_methods"/>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+    <app-top-products-metrics [products]="metrics().top_products" />
+
+    </div>
+}
+</section>

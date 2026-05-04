@@ -5,7 +5,7 @@ import { environment } from "../../../environments/environment";
 
 export abstract class MetricServiceAbstract {
 
-    const API_URL = `${environment.apiUrl}/metrics`;
+    readonly API_URL = `${environment.apiUrl}/metrics`;
 
     abstract getMetrics(): Observable<DashboardMetricsInterface>;
     abstract getMetricsResource(): ResourceRef<DashboardMetricsInterface>;

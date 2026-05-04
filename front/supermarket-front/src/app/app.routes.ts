@@ -32,8 +32,14 @@ export const routes: Routes = [
 {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'products',
+    redirectTo: 'metrics',
 },
+    {
+    path: 'metrics',
+    loadComponent: () =>
+    import('./pages/admin/metrics/metrics.component')
+        .then((m) => m.MetricsComponent),
+    },
 {
     path: 'products',
     loadComponent: () =>

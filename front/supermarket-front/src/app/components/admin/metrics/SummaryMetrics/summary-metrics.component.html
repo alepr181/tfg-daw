@@ -1,1 +1,25 @@
-<p>summary-metrics.component works!</p>
+<section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <p class="text-sm font-medium text-slate-600">Facturación total</p>
+        <p class="mt-2 text-3xl font-bold text-slate-900">
+            {{ summary().total_revenue }} €
+        </p>
+    <p class="mt-2 text-sm text-slate-500">Ventas completadas acumuladas.</p>
+</article>
+
+<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <p class="text-sm font-medium text-slate-600">Pedidos totales</p>
+        <p class="mt-2 text-3xl font-bold text-slate-900">
+            {{ summary().total_orders }}
+        </p>
+    <p class="mt-2 text-sm text-slate-500">Pedidos registrados.</p>
+</article>
+
+    <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <p class="text-sm font-medium text-slate-600">Productos</p>
+            <p class="mt-2 text-3xl font-bold text-slate-900">
+                {{ summary().total_products }}
+            </p>
+        <p class="mt-2 text-sm text-slate-500">Productos del catálogo.</p>
+    </article>
+</section>
