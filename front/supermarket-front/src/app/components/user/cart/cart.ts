@@ -54,7 +54,7 @@ export class Cart {
 
     this.#orderService.add(payload).subscribe({
       next: (order) => {
-        this.#snackBar.open(`Pedido creado con ID ${order.order.id}`, "OK");
+        this.#snackBar.open(`Pedido creado con ID ${order.order.id}`, "OK",{ duration: 3000 });
 
         this.#cartService.clearCart();
 
@@ -67,7 +67,7 @@ export class Cart {
 
       },
       error: (error) => {
-        this.#snackBar.open('Error al crear pedido', "OK")
+        this.#snackBar.open('Error al crear pedido', "OK",{ duration: 3000 });
       }
     });
   }
