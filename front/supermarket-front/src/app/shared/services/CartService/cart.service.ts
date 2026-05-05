@@ -112,24 +112,33 @@ export class CartService {
     );
   }
 
-  addProductByBarcode(barcode: string): void {
-  const normalizedBarcode = barcode.trim();
+    addProductByBarcode(barcode: string): void {
+    const normalizedBarcode = barcode.trim();
 
-  if (normalizedBarcode === '') {
-    return;
-  }
+    if (normalizedBarcode === '') {
+      return;
+    }
 
-  const product = this.#productService.products().find((product) => product.barcode === normalizedBarcode);
+    const product = this.#productService.products().find((product) => product.barcode === normalizedBarcode);
 
-  if (!product) {
-    this.#matSnackBar.open(
-      'Producto no encontrado.',
-      'Cerrar',
-      { duration: 3000 },
-    );
+    if (product?.stock === 0) {
+      this.#matSnackBar.open(
+        'Producto sin stock disponible.',
+        'Cerrar',
+        { duration: 3000 },
+      );
+      return;
+    }
 
-    return;
-  }
+    if (!product) {
+      this.#matSnackBar.open(
+        'Producto no encontrado.',
+        'Cerrar',
+        { duration: 3000 },
+      );
+
+      return;
+    }
 
   this.addProduct(product);
 }
