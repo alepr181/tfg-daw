@@ -78,9 +78,27 @@ export class AdminOrdersComponent {
     });
   }
 
-  downloadInvoice(orderId: number): void {
-    this.#orderService.downloadInvoice(orderId);
-  }
+downloadInvoice(orderId: number): void {
+  this.#orderService.downloadInvoice(orderId).subscribe({
+    next: (blob) => {
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `factura-${orderId}.pdf`;
+      link.click();
+
+      window.URL.revokeObjectURL(url);
+    },
+    error: () => {
+      this.#matSnackBar.open(
+        'No se pudo descargar la factura.',
+        'Cerrar',
+        { duration: 5000 },
+      );
+    },
+  });
+}
 
   searchOrders(term: string): void {
     this.#orderService.setSearchTerm(term);
@@ -107,8 +125,6 @@ export class AdminOrdersComponent {
   formatPaymentMethod(method: string): string {
     return this.#orderService.formatPaymentMethod(method);
   }
+}
 
-
-
-}  
 

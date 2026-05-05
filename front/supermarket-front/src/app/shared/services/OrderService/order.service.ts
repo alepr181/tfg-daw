@@ -124,8 +124,13 @@ export class OrderService extends OrderServiceAbstract {
     });
   }
 
-  downloadInvoice(orderId: number): void {
-    window.open(`${this.API_ENDPOINT}/${orderId}/invoice`, '_blank');
+  downloadInvoice(orderId: number): Observable<Blob> {
+    return this.#http.get(
+      `${this.API_ENDPOINT}/${orderId}/invoice`,
+      {
+        responseType: 'blob',
+      },
+    );
   }
 
   formatStatus(status: string): string {
