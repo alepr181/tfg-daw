@@ -2,10 +2,11 @@ import { Component, signal } from '@angular/core';
 import { ProductList } from '../../../components/user/products/product-list/product-list';
 import { ProductSearch } from '../../../components/user/products/product-search/product-search';
 import { Cart } from '../../../components/user/cart/cart';
+import { CashierHeaderComponent } from '../../../components/user/cashier-header/cashier-header.component';
 
 @Component({
   selector: 'app-cashier-page',
-  imports: [ProductList, ProductSearch, Cart],
+  imports: [ProductList, ProductSearch, Cart, CashierHeaderComponent],
   templateUrl: './cashier-page.html',
   styleUrl: './cashier-page.css',
 })

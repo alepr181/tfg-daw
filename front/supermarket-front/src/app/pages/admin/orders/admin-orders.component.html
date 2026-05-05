@@ -74,6 +74,14 @@
                 <td class="px-4 py-3">
                     <div class="flex justify-end gap-2">
                     <button
+                    type="button"
+                    class="cursor-pointer rounded-lg border border-blue-200 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-50"
+                    (click)="downloadInvoice(order.id)"
+                    >
+                    FACTURA
+                    </button>
+                    
+                    <button
                         type="button"
                         class="cursor-pointer rounded-lg border border-green-200 px-3 py-2 text-sm font-medium text-green-700 transition hover:bg-green-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
                         aria-label="Ver pedido"

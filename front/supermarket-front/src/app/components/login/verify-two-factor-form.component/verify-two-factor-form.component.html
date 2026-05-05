@@ -19,8 +19,6 @@ novalidate
     placeholder="123456"
     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-center text-xl font-semibold tracking-[0.35em] text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
     [class.border-red-500]="codeControl.invalid && (codeControl.touched || codeControl.dirty)"
-    [attr.aria-invalid]="codeControl.invalid && (codeControl.touched || codeControl.dirty)"
-    [attr.aria-describedby]="codeControl.invalid && (codeControl.touched || codeControl.dirty) ? 'code-error' : null"
 />
 
 @if (codeControl.invalid && (codeControl.touched || codeControl.dirty)) {

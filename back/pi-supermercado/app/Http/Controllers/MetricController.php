@@ -17,7 +17,6 @@ class MetricController extends Controller
     {
         return response()->json([
             'summary' => $this->getSummary(),
-            'sales_trend' => $this->getSalesTrend(),
             'top_products' => $this->getTopProducts(),
             'low_stock_products' => $this->getLowStockProducts(),
             'payment_methods' => $this->getPaymentMethods(),
@@ -27,31 +26,13 @@ class MetricController extends Controller
     private function getSummary(): array
     {
         return [
-            'total_revenue' => (float) Order::where('status', 'completed')->sum('total'),
+            'total_revenue' => (float) Order::whereIn('status', ['completed', 'paid'])->sum('total'),
             'total_orders' => Order::count(),
             'completed_orders' => Order::where('status', 'completed')->count(),
             'pending_orders' => Order::where('status', 'pending')->count(),
             'cancelled_orders' => Order::where('status', 'cancelled')->count(),
             'total_products' => Product::count(),
         ];
-    }
-
-    private function getSalesTrend(): array
-    {
-        return Order::query()
-            ->selectRaw('DATE(created_at) as date')
-            ->selectRaw('SUM(total) as l')
-            ->selectRaw('COUNT(*) as orders_count')
-            ->where('status', 'completed')
-            ->groupByRaw('DATE(created_at)')
-            ->orderBy('date')
-            ->get()
-            ->map(fn ($item) => [
-                'date' => $item->date,
-                'total' => (float) $item->total,
-                'orders_count' => (int) $item->orders_count,
-            ])
-            ->toArray();
     }
 
     private function getTopProducts(): array

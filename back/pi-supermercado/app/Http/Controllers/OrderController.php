@@ -7,6 +7,8 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class OrderController extends Controller
 {
@@ -133,5 +135,15 @@ class OrderController extends Controller
             'message' => 'Pedido eliminado correctamente'
         ], 200);
 
+    }
+
+    public function invoice(Order $order) {
+        $order->load('items.product', 'user');
+
+        $pdf = Pdf::loadView('pdf.invoice', [
+            'order' => $order,
+        ]);
+
+        return $pdf->download("invoice-{$order->id}.pdf");
     }
 }

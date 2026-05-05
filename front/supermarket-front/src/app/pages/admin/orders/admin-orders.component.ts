@@ -78,6 +78,10 @@ export class AdminOrdersComponent {
     });
   }
 
+  downloadInvoice(orderId: number): void {
+    this.#orderService.downloadInvoice(orderId);
+  }
+
   searchOrders(term: string): void {
     this.#orderService.setSearchTerm(term);
   }

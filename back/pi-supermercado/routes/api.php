@@ -31,3 +31,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/metrics/', [MetricController::class, 'dashboard']);
 });
+
+Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice']);

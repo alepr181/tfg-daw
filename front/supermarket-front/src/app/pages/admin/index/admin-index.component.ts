@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLinkWithHref, RouterLink, RouterLinkActive } from '@angular/router';
+import { TokenStorageService } from '../../../shared/services/TokenStorageService/token-storage.service';
 
 @Component({
   selector: 'app-admin-index.component',
@@ -7,4 +8,14 @@ import { RouterOutlet, RouterLinkWithHref, RouterLink, RouterLinkActive } from '
   templateUrl: './admin-index.component.html',
   styleUrl: './admin-index.component.css',
 })
-export class AdminIndexComponent {}
+export class AdminIndexComponent {
+
+  readonly #tokenStorageService = inject(TokenStorageService);
+
+  readonly user = this.#tokenStorageService.userData;
+
+  logout() {
+    this.#tokenStorageService.logout();
+  }
+
+}

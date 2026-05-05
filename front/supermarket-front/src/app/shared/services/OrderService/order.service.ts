@@ -124,6 +124,10 @@ export class OrderService extends OrderServiceAbstract {
     });
   }
 
+  downloadInvoice(orderId: number): void {
+    window.open(`${this.API_ENDPOINT}/${orderId}/invoice`, '_blank');
+  }
+
   formatStatus(status: string): string {
   return this.STATUS_TYPES[status] ?? status;
 }

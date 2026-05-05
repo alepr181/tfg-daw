@@ -40,7 +40,7 @@ class AuthController extends Controller
             'pepe@supermarket.com',
         ])) {
             $code = '999999';
-        } //Usuarios ficticios llevan código fijo.
+        } //Usuarios ficticios tienen un código fijo (demo).
 
 
 

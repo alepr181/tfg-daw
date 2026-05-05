@@ -1,16 +1,25 @@
 <div class="min-h-screen bg-gray-100 p-6">
+  <div class="mb-6">
+    <app-cashier-header />
+  </div>
+
   <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
     <div class="xl:col-span-2">
       <div class="space-y-8">
         <div class="mb-6">
-        <app-product-search (searchChange)="onSearchChange($event)"></app-product-search>
+          <app-product-search
+            (searchChange)="onSearchChange($event)"
+          />
         </div>
-        <app-product-list [searchTerm]="searchTerm()"></app-product-list>
+
+        <app-product-list
+          [searchTerm]="searchTerm()"
+        />
       </div>
     </div>
 
     <div>
-      <app-cart></app-cart>
+      <app-cart />
     </div>
   </div>
 </div>

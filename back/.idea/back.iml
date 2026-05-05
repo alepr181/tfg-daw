@@ -116,6 +116,13 @@
       <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/tijsverkoyen/css-to-inline-styles" />
       <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/voku/portable-ascii" />
+      <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/barryvdh/laravel-dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/dompdf/dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/dompdf/php-font-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/dompdf/php-svg-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/masterminds/html5" />
+      <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/sabberworm/php-css-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/pi-supermercado/vendor/thecodingmachine/safe" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

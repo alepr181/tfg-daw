@@ -1,0 +1,19 @@
+<header class="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+    <div>
+        <p class="text-xs text-slate-500">
+        ¡Hola, {{ user?.name }}!
+        </p>
+
+        <p class="text-sm font-medium text-slate-900">
+            Punto de venta
+        </p>
+    </div>
+
+    <button
+        type="button"
+        class="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50 hover:text-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 cursor-pointer"
+        (click)="logout()"
+    >
+        Cerrar sesión
+    </button>
+</header>

@@ -1,5 +1,6 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { UserInterface } from '../../interfaces/user-interface';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ export class TokenStorageService{
   readonly isLogin = computed(() => this.#isLogin());
   #token = localStorage.getItem("token") || "";
   #user = signal<UserInterface | null>(JSON.parse(localStorage.getItem('user') || 'null'));
+  #router = inject(Router);
   readonly user = computed(() => this.#user());
 
 
@@ -30,8 +32,8 @@ export class TokenStorageService{
       return this.#token;
     }
 
-  set userData(user: UserInterface | null) {
-    this.#user.set(user);
+    set userData(user: UserInterface | null) {
+      this.#user.set(user);
 
     if (user === null) {
       localStorage.removeItem('user');
@@ -41,8 +43,13 @@ export class TokenStorageService{
     localStorage.setItem('user', JSON.stringify(user));
   }
 
+  get userData(): UserInterface | null {
+    return this.#user();
+  }
+
   logout(): void {
     this.token = '';
     this.userData = null;
+    this.#router.navigate(['/']);
   }
   }
