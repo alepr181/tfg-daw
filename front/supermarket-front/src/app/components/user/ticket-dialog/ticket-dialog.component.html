@@ -1,0 +1,65 @@
+    <h2
+    mat-dialog-title
+    class="px-6 pt-6 text-lg font-semibold text-slate-900 text-center"
+    >
+    ¿Ticket impreso o digital?
+    </h2>
+
+    <div class="px-6 pt-4">
+    <label class="block text-sm font-medium text-slate-700">
+        Correo electrónico
+    </label>
+
+    <form [formGroup]="emailForm" class="px-6 pt-4" novalidate>
+        <label for="email" class="block text-sm font-medium text-slate-700">
+            Correo electrónico
+        </label>
+
+        <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="correo@ejemplo.com"
+            class="block mb-2 mt-2 w-full rounded-xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+            [class.border-red-500]="emailControl.invalid && (emailControl.touched || emailControl.dirty)"
+        />
+
+        @if (emailControl.invalid && (emailControl.touched || emailControl.dirty)) {
+            <p class="mb-3 text-sm text-red-600">
+            @if (emailControl.hasError('required')) {
+                El correo es obligatorio.
+            } @else if (emailControl.hasError('email')) {
+                Introduce un correo válido.
+            }
+            </p>
+        }
+    </form>
+</div>
+
+    <mat-dialog-actions
+    class="flex w-full !justify-center gap-3 px-6 pb-6 pt-6"
+    >
+    <button
+        type="button"
+        (click)="close()"
+        class="cursor-pointer rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+    >
+        Sin ticket
+    </button>
+
+    <button
+        type="button"
+        (click)="downloadTicket()"
+        class="cursor-pointer rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+    >
+        Imprimir ticket
+    </button>
+
+    <button
+        type="button"
+        (click)="emailTicket()"
+        class="cursor-pointer rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+    >
+        Enviar ticket
+    </button>
+</mat-dialog-actions>

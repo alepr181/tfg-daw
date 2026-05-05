@@ -1,10 +1,10 @@
 import { Component, computed, inject, input, output } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthInterface } from '../../../shared/interfaces/auth.interface';
 
 @Component({
   selector: 'app-login-form-component',
-  imports: [ReactiveFormsModule],
+  imports: [FormsModule,ReactiveFormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css',
 })

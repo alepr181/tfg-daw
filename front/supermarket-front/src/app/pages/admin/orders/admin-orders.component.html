@@ -75,6 +75,15 @@
                     <div class="flex justify-end gap-2">
                     <button
                     type="button"
+                    class="cursor-pointer rounded-lg border border-purple-200 px-3 py-2 text-sm font-medium text-purple-700 transition hover:bg-purple-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
+                    aria-label="Generar ticket"
+                    (click)="downloadTicket(order.id)"
+                    >
+                    TICKET
+                    </button>
+                    
+                    <button
+                    type="button"
                     class="cursor-pointer rounded-lg border border-blue-200 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-50"
                     (click)="downloadInvoice(order.id)"
                     >

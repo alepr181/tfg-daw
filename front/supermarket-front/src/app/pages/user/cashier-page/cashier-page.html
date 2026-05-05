@@ -7,9 +7,14 @@
     <div class="xl:col-span-2">
       <div class="space-y-8">
         <div class="mb-6">
+          <app-product-barcode-input
+            class="block mb-3"
+            (barcodeSubmit)="onBarcodeSubmit($event)"
+          />
           <app-product-search
             (searchChange)="onSearchChange($event)"
           />
+
         </div>
 
         <app-product-list

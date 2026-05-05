@@ -25,6 +25,10 @@ Route::middleware('auth:sanctum')->group(function () {
     //Generación de facturas
 
     Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice']);
+    Route::get('/orders/{order}/ticket', [OrderController::class, 'ticket']);
+    Route::post('/orders/{order}/email-ticket', [OrderController::class, 'emailTicket']);
+
+
 
     // CRUD de Productos
     Route::apiResource('products', ProductController::class);

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TicketEmail;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 
 class OrderController extends Controller
@@ -145,5 +147,31 @@ class OrderController extends Controller
         ]);
 
         return $pdf->download("invoice-{$order->id}.pdf");
+    }
+
+    public function ticket(Order $order) {
+        $order->load('items.product', 'user');
+
+        $pdf = Pdf::loadView('pdf.ticket', [
+            'order' => $order,
+        ])->setPaper('0,0, 226.77, 600', 'portrait');
+
+        return $pdf->download("ticket-{$order->id}.pdf");
+    }
+
+    public function emailTicket(Order $order, Request $request) {
+        $data = $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        $order->load('items.product', 'user');
+
+        Mail::to($data['email'])
+            ->send(new TicketEmail($order));
+
+        return response()->json([
+            'message' => 'Ticket enviado correctamente',
+        ]);
+
     }
 }

@@ -133,6 +133,22 @@ export class OrderService extends OrderServiceAbstract {
     );
   }
 
+  emailTicket(orderId: number, email: string): Observable<any> {
+    return this.#http.post(
+      `${this.API_ENDPOINT}/${orderId}/email-ticket`,
+      { email }
+    );
+  }
+
+    downloadTicket(orderId: number): Observable<Blob> {
+    return this.#http.get(
+      `${this.API_ENDPOINT}/${orderId}/ticket`,
+      {
+        responseType: 'blob',
+      },
+    );
+  }
+
   formatStatus(status: string): string {
   return this.STATUS_TYPES[status] ?? status;
 }

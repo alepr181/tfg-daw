@@ -2,6 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { CartService } from '../../../shared/services/CartService/cart.service';
 import { OrderService } from '../../../shared/services/OrderService/order.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
 
 
 @Component({
@@ -21,6 +23,8 @@ export class Cart {
   readonly subtotal = this.#cartService.subtotal;
   readonly total = this.#cartService.total;
   readonly totalItems = this.#cartService.totalItems;
+  readonly #dialog = inject(MatDialog);
+
 
 
   increaseQuantity(productId: number): void {
@@ -46,19 +50,25 @@ export class Cart {
 }
 
   checkout(): void {
-  const payload = this.#cartService.buildOrderPayload(2, this.paymentMethod());
+    const payload = this.#cartService.buildOrderPayload(2, this.paymentMethod());
 
-  this.#orderService.add(payload).subscribe({
-    next: (order) => {
-      this.#snackBar.open(`Pedido creado con ID ${order.order.id}`, "OK");
+    this.#orderService.add(payload).subscribe({
+      next: (order) => {
+        this.#snackBar.open(`Pedido creado con ID ${order.order.id}`, "OK");
 
-      this.#cartService.clearCart();
-    },
-    error: (error) => {
-      this.#snackBar.open('Error al crear pedido', "OK")
-    }
-  });
+        this.#cartService.clearCart();
 
-  
-}
+        this.#dialog.open(TicketDialogComponent, {
+          width: '500px',
+          data: {
+            id: order.order.id
+          }
+        });
+
+      },
+      error: (error) => {
+        this.#snackBar.open('Error al crear pedido', "OK")
+      }
+    });
+  }
 }

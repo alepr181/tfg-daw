@@ -1,0 +1,28 @@
+<div class="rounded-2xl bg-white p-4 shadow">
+    <form
+    role="search"
+    aria-label="Añadir producto por código de barras"
+    class="flex flex-col gap-3 md:flex-row"
+    (ngSubmit)="onSubmit(barcodeInput.value) ; barcodeInput.value=''; barcodeInput.focus()"
+    >
+
+        <input
+            #barcodeInput
+            type="search"
+            name="barcode"
+            placeholder="Escanear o introducir código de barras..."
+            aria-label="Código de barras del producto"
+            autocomplete="off"
+            inputmode="numeric"
+            class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-500"
+        />
+
+        <button
+            type="submit"
+                class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 cursor-pointer"
+            >
+                Añadir
+        </button>
+    </form>
+</div>
+

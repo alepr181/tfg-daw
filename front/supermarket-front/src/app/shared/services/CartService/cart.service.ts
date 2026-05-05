@@ -1,6 +1,8 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { ProductInterface } from '../../interfaces/product-interface';
 import { CartProductInterface } from '../../interfaces/cart-product.interface';
+import { ProductService } from '../ProductService/product.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +11,8 @@ export class CartService {
   readonly #itemsSignal = signal<CartProductInterface[]>([]);
 
   readonly items = this.#itemsSignal.asReadonly();
+  readonly #productService = inject(ProductService);
+  readonly #matSnackBar = inject(MatSnackBar);
 
   readonly totalItems = computed(() =>
     this.#itemsSignal().reduce((total, item) => total + item.quantity, 0)
@@ -60,7 +64,6 @@ export class CartService {
       });
     });
   }
-
   increaseQuantity(productId: number): void {
     this.#itemsSignal.update((items) =>
       items.map((item) => {
@@ -108,6 +111,28 @@ export class CartService {
       items.filter((item) => item.productId !== productId)
     );
   }
+
+  addProductByBarcode(barcode: string): void {
+  const normalizedBarcode = barcode.trim();
+
+  if (normalizedBarcode === '') {
+    return;
+  }
+
+  const product = this.#productService.products().find((product) => product.barcode === normalizedBarcode);
+
+  if (!product) {
+    this.#matSnackBar.open(
+      'Producto no encontrado.',
+      'Cerrar',
+      { duration: 3000 },
+    );
+
+    return;
+  }
+
+  this.addProduct(product);
+}
 
   clearCart(): void {
     this.#itemsSignal.set([]);
