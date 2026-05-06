@@ -91,4 +91,3 @@ jobs:
             docker compose exec -T backend php artisan route:clear
             docker compose exec -T backend php artisan view:clear
             docker compose exec -T backend php artisan cache:clear
-            docker compose exec -T backend php artisan db:seed --force
