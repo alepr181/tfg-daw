@@ -80,7 +80,10 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            set -e
             cd /home/pruz/tfg-daw
+            git reset --hard
+            git clean -fd -e back/pi-supermercado/.env.production
             git pull origin main
             docker compose up -d --build
             docker compose exec -T backend php artisan config:clear
