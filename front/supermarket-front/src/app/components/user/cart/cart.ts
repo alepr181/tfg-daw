@@ -4,6 +4,8 @@ import { OrderService } from '../../../shared/services/OrderService/order.servic
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
+import { TokenStorageService } from '../../../shared/services/TokenStorageService/token-storage.service';
+import { UserInterface } from '../../../shared/interfaces/user-interface';
 
 
 @Component({
@@ -23,6 +25,7 @@ export class Cart {
   readonly subtotal = this.#cartService.subtotal;
   readonly total = this.#cartService.total;
   readonly totalItems = this.#cartService.totalItems;
+  readonly #tokenStorageService = inject(TokenStorageService);
   readonly #dialog = inject(MatDialog);
 
 
@@ -50,7 +53,14 @@ export class Cart {
 }
 
   checkout(): void {
-    const payload = this.#cartService.buildOrderPayload(2, this.paymentMethod());
+    const user = this.#tokenStorageService.userData;
+
+    if (!user) {
+      return;
+    }
+
+    const payload = this.#cartService.buildOrderPayload(user.id, this.paymentMethod());
+
 
     this.#orderService.add(payload).subscribe({
       next: (order) => {

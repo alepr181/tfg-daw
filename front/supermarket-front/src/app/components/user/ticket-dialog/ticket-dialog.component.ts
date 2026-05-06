@@ -36,7 +36,6 @@ export class TicketDialogComponent {
         this.emailForm.markAllAsTouched();
         return;
     }
-      console.log('NO HA DEVUELTO')
       this.#orderService.emailTicket(this.data.id, this.emailControl.value).subscribe({
         next: () => {
           this.#matSnackBar.open(
