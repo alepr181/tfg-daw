@@ -1,0 +1,74 @@
+services:
+  frontend:
+    build:
+      context: ./front/supermarket-front
+      dockerfile: Dockerfile
+    container_name: supermarket-frontend
+    ports:
+      - "9000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./back/pi-supermercado
+      dockerfile: Dockerfile
+    container_name: supermarket-backend
+    ports:
+      - "9005:8000"
+    volumes:
+      - ./back/pi-supermercado/.env.production:/var/www/html/.env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_URL: http://vps-4a18b7c2.vps.ovh.net:9005
+
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: supermarket
+      DB_USERNAME: supermarket
+      DB_PASSWORD: supermarket
+
+    depends_on:
+      - mysql
+
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.4
+    container_name: supermarket-database
+
+    environment:
+      MYSQL_DATABASE: supermarket
+      MYSQL_USER: supermarket
+      MYSQL_PASSWORD: supermarket
+      MYSQL_ROOT_PASSWORD: root
+
+    ports:
+      - "3309:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    restart: unless-stopped
+  proxy:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: supermarket-proxy
+
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+
+    volumes:
+      - proxy_data:/data
+      - proxy_letsencrypt:/etc/letsencrypt
+
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  proxy_data:
+  proxy_letsencrypt:

@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:8000/api'
+    apiUrl: 'http://vps-4a18b7c2.vps.ovh.net:9005/api',
 };
