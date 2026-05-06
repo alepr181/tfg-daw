@@ -58,9 +58,9 @@ services:
     container_name: supermarket-proxy
 
     ports:
-      - "8085:80"
-      - "8185:81"
-      - "4435:443"
+      - "80:80"
+      - "81:81"
+      - "443:443"
 
     volumes:
       - proxy_data:/data

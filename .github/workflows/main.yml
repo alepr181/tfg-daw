@@ -88,3 +88,7 @@ jobs:
             docker compose up -d --build
             docker compose exec -T backend php artisan config:clear
             docker compose exec -T backend php artisan migrate --force
+            docker compose exec -T backend php artisan route:clear
+            docker compose exec -T backend php artisan view:clear
+            docker compose exec -T backend php artisan cache:clear
+            docker compose exec -T backend php artisan db:seed --force
