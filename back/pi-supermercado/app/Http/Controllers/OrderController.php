@@ -167,7 +167,7 @@ class OrderController extends Controller
     public function ticket(Order $order) {
         $order->load('items.product', 'user');
 
-        $this->authorize('view', $order);
+        $this->authorize('create', Order::class);
 
 
         $pdf = Pdf::loadView('pdf.ticket', [
@@ -184,7 +184,7 @@ class OrderController extends Controller
 
         $order->load('items.product', 'user');
 
-        $this->authorize('view', $order);
+        $this->authorize('create', Order::class);
 
 
         Mail::to($data['email'])
