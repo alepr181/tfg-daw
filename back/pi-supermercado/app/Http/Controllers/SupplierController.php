@@ -9,7 +9,7 @@ class SupplierController extends Controller
 {
     public function index()
     {
-        $this->authorize('view', Supplier::class);
+        $this->authorize('viewAny', Supplier::class);
         $suppliers = Supplier::select('id', 'name', 'email')->get();
 
         return response()->json($suppliers, 200);

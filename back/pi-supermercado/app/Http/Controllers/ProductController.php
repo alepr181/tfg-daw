@@ -10,7 +10,7 @@ class ProductController extends Controller
     public function index()
     {
 
-        $this->authorize('view', Product::class);
+        $this->authorize('viewAny', Product::class);
 
         $products = Product::with('category', 'supplier')->get();
 

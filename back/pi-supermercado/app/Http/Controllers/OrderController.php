@@ -19,7 +19,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $this->authorize('view', Order::class);
+        $this->authorize('viewAny', Order::class);
         $orders = Order::with([
             'user',
             'items.product'

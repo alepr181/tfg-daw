@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $this->authorize('view', User::class);
+        $this->authorize('viewAny', User::class);
         $users = User::with('orders')->get();
 
         return response()->json($users, 200);
