@@ -9,7 +9,11 @@ class ProductController extends Controller
 {
     public function index()
     {
+
+        $this->authorize('view', Product::class);
+
         $products = Product::with('category', 'supplier')->get();
+
 
         return response()->json([
             'data' => $products,
@@ -20,12 +24,16 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::with('category', 'supplier')->findOrFail($id);
+        $this->authorize('view', $product);
 
         return response()->json($product, 200);
     }
 
     public function store(Request $request)
     {
+
+        $this->authorize('create', Product::class);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'barcode' => 'required|string|max:255|unique:products,barcode',
@@ -52,7 +60,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
+        $this->authorize('update', $product);
         $request->validate([
             'name' => 'required|string|max:255',
             'barcode' => 'required|string|max:255|unique:products,barcode,' . $product->id,
@@ -79,6 +87,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+        $this->authorize('delete', $product);
 
         if ($product->orderItems()->exists()) {
             return response()->json([

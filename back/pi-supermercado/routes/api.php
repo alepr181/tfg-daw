@@ -9,6 +9,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AdminMiddleware;
 
 // Autenticación email + password y check del código 2FA. Throttle limita a 5 peticiones por minuto desde una dirección IP por seguridad.
 Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
@@ -28,8 +29,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/{order}/ticket', [OrderController::class, 'ticket']);
     Route::post('/orders/{order}/email-ticket', [OrderController::class, 'emailTicket']);
 
-
-
     // CRUD de Productos
     Route::apiResource('products', ProductController::class);
 
@@ -43,5 +42,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
 
     // Control de métricas.
-    Route::get('/metrics', [MetricController::class, 'dashboard']);
+    Route::get('/metrics', [MetricController::class, 'dashboard'])->middleware(AdminMiddleware::class);
 });

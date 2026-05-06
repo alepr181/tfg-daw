@@ -10,6 +10,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        $this->authorize('view', User::class);
         $users = User::with('orders')->get();
 
         return response()->json($users, 200);
@@ -18,12 +19,14 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::with('orders')->findOrFail($id);
+        $this->authorize('view', $user);
 
         return response()->json($user, 200);
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -46,6 +49,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+        $this->authorize('update', $user);
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -74,6 +78,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::with('orders')->findOrFail($id);
+        $this->authorize('delete', $user);
 
         if ($user->orders()->exists()) {
             return response()->json([

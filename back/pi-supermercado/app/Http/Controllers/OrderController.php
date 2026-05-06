@@ -19,6 +19,7 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $this->authorize('view', Order::class);
         $orders = Order::with([
             'user',
             'items.product'
@@ -33,6 +34,9 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+
+        $this->authorize('create', Order::class);
+
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'status' => 'required|in:pending,completed,cancelled',
@@ -95,6 +99,10 @@ class OrderController extends Controller
     {
         $order = Order::with('user', 'orderItems.product')->findOrFail($id);
 
+        $this->authorize('view', $order);
+
+
+
         return response()->json($order);
     }
 
@@ -104,6 +112,9 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         $order = Order::findOrFail($id);
+
+        $this->authorize('update', $order);
+
 
         $request->validate([
             'status' => 'required|in:pending,paid,cancelled,completed',
@@ -125,6 +136,9 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
 
+        $this->authorize('update', $order);
+
+
         // Devolver el stock de los productos
         foreach ($order->items as $item) {
             $product = Product::findOrFail($item->product_id);
@@ -141,6 +155,7 @@ class OrderController extends Controller
 
     public function invoice(Order $order) {
         $order->load('items.product', 'user');
+        $this->authorize('view', $order);
 
         $pdf = Pdf::loadView('pdf.invoice', [
             'order' => $order,
@@ -151,6 +166,9 @@ class OrderController extends Controller
 
     public function ticket(Order $order) {
         $order->load('items.product', 'user');
+
+        $this->authorize('view', $order);
+
 
         $pdf = Pdf::loadView('pdf.ticket', [
             'order' => $order,
@@ -165,6 +183,9 @@ class OrderController extends Controller
         ]);
 
         $order->load('items.product', 'user');
+
+        $this->authorize('view', $order);
+
 
         Mail::to($data['email'])
             ->send(new TicketEmail($order));

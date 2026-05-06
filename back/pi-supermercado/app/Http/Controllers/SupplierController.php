@@ -9,6 +9,7 @@ class SupplierController extends Controller
 {
     public function index()
     {
+        $this->authorize('view', Supplier::class);
         $suppliers = Supplier::select('id', 'name', 'email')->get();
 
         return response()->json($suppliers, 200);
@@ -17,12 +18,14 @@ class SupplierController extends Controller
     public function show($id)
     {
         $supplier = Supplier::with('products')->findOrFail($id);
+        $this->authorize('view', $supplier);
 
         return response()->json($supplier, 200);
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Supplier::class);
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:suppliers,email',
@@ -39,6 +42,7 @@ class SupplierController extends Controller
     public function update(Request $request, $id)
     {
         $supplier = Supplier::findOrFail($id);
+        $this->authorize('update', $supplier);
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -56,6 +60,7 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         $supplier = Supplier::findOrFail($id);
+        $this->authorize('delete', $supplier);
 
         if ($supplier->products()->exists()) {
             return response()->json([

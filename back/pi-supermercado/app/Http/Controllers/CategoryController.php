@@ -9,6 +9,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Category::class);
         $categories = Category::all();
 
         return response()->json($categories, 200);
@@ -16,13 +17,15 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-        $category = Category::with('products')->findOrFail($id);
 
+        $category = Category::with('products')->findOrFail($id);
+        $this->authorize('view', $category);
         return response()->json($category, 200);
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Category::class);
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
         ]);
@@ -40,6 +43,8 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
 
+        $this->authorize('update', $category);
+
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
         ]);
@@ -56,6 +61,8 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
+
+        $this->authorize('delete', $category);
 
         if ($category->products()->exists()) {
             return response()->json([
