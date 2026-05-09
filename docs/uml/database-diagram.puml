@@ -1,0 +1,107 @@
+@startuml
+title Modelo de Base de Datos - Supermercado
+
+hide circle
+skinparam linetype ortho
+
+entity "users" as users {
+  * id : bigint <<PK>>
+  --
+  name : varchar
+  email : varchar <<unique>>
+  email_verified_at : timestamp nullable
+  password : varchar
+  role : varchar = "user"
+  account_status : varchar = "active"
+  two_factor_code : varchar nullable
+  two_factor_expires_at : timestamp nullable
+  remember_token : varchar nullable
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "categories" as categories {
+  * id : bigint <<PK>>
+  --
+  name : varchar <<unique>>
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "suppliers" as suppliers {
+  * id : bigint <<PK>>
+  --
+  name : varchar
+  email : varchar <<unique>>
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "products" as products {
+  * id : bigint <<PK>>
+  --
+  name : varchar
+  barcode : varchar <<unique>>
+  price : decimal(8,2)
+  stock : integer = 0
+  category_id : bigint <<FK>>
+  supplier_id : bigint <<FK>>
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "orders" as orders {
+  * id : bigint <<PK>>
+  --
+  user_id : bigint <<FK>>
+  status : varchar = "pending"
+  total : decimal(8,2) = 0
+  payment_method : varchar
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "order_items" as order_items {
+  * id : bigint <<PK>>
+  --
+  order_id : bigint <<FK>>
+  product_id : bigint <<FK>>
+  quantity : integer
+  unit_price : decimal(8,2)
+  subtotal : decimal(8,2)
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+
+users ||--o{ orders : user_id
+orders ||--|{ order_items : order_id
+products ||--o{ order_items : product_id
+categories ||--o{ products : category_id
+suppliers ||--o{ products : supplier_id
+
+note right of products
+FK category_id cascadeOnDelete
+FK supplier_id cascadeOnDelete
+
+La aplicación bloquea eliminar categorías/proveedores
+si tienen productos asociados.
+end note
+
+note right of orders
+FK user_id cascadeOnDelete
+
+La aplicación bloquea eliminar usuarios
+si tienen pedidos asociados.
+end note
+
+note right of order_items
+FK order_id cascadeOnDelete
+FK product_id cascadeOnDelete
+
+La aplicación bloquea eliminar productos
+si tienen order_items asociados.
+end note
+
+
+@enduml

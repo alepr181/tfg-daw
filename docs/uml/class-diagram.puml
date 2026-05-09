@@ -1,0 +1,191 @@
+@startuml
+title Frontend Angular - Rutas, páginas, servicios y componentes
+
+left to right direction
+skinparam componentStyle rectangle
+
+actor "Admin\nrole=admin" as Admin
+actor "Cajero\nrole=user" as Cashier
+actor "Visitante" as Guest
+
+package "Routing" {
+  component "AppRoutes" as Routes
+  component "authGuard" as AuthGuard
+  component "roleGuard" as RoleGuard
+  component "guestGuard" as GuestGuard
+  component "authInterceptor" as AuthInterceptor
+}
+
+package "Auth UI" {
+  component "LoginPageComponent\n/login" as LoginPage
+  component "LoginFormComponent" as LoginForm
+  component "VerifyTwoFactorPageComponent\n/verify-2fa" as VerifyPage
+  component "VerifyTwoFactorFormComponent" as VerifyForm
+}
+
+package "Admin UI\n/admin" {
+  component "AdminIndexComponent" as AdminIndex
+  component "MetricsComponent\n/admin/dashboard" as MetricsPage
+  component "AdminProductsComponent\n/admin/products" as ProductsPage
+  component "AdminUsersComponent\n/admin/users" as UsersPage
+  component "AdminOrdersComponent\n/admin/orders" as OrdersPage
+  component "AdminSuppliersComponent\n/admin/suppliers" as SuppliersPage
+
+  component "SearchBoxComponent" as SearchBox
+  component "ProductFormDialogComponent" as ProductDialog
+  component "UserFormDialogComponent" as UserDialog
+  component "SupplierFormDialogComponent" as SupplierDialog
+  component "OrderDetailDialogComponent" as OrderDialog
+  component "ConfirmDialogComponent" as ConfirmDialog
+
+  component "SummaryMetricsComponent" as SummaryMetrics
+  component "TopProductsMetricsComponent" as TopProductsMetrics
+  component "PaymentMethodsMetricsComponent" as PaymentMetrics
+  component "LowStockMetricsComponent" as LowStockMetrics
+}
+
+package "Cashier / TPV UI\n/cashier" {
+  component "CashierPage" as CashierPage
+  component "CashierHeaderComponent" as CashierHeader
+  component "ProductSearch" as ProductSearch
+  component "ProductBarcodeInputComponent" as BarcodeInput
+  component "ProductList" as ProductList
+  component "Cart" as CartComponent
+  component "TicketDialogComponent" as TicketDialog
+}
+
+package "Services" {
+  component "AuthService" as AuthService
+  component "TokenStorageService" as TokenStorage
+  component "ProductService" as ProductService
+  component "CategoryService" as CategoryService
+  component "SupplierService" as SupplierService
+  component "UserService" as UserService
+  component "OrderService" as OrderService
+  component "MetricService" as MetricService
+  component "CartService" as CartService
+}
+
+package "Backend API" {
+  interface "/auth/login" as ApiLogin
+  interface "/auth/verify-2fa" as Api2FA
+  interface "/auth/me" as ApiMe
+  interface "/products" as ApiProducts
+  interface "/categories" as ApiCategories
+  interface "/suppliers" as ApiSuppliers
+  interface "/users" as ApiUsers
+  interface "/orders" as ApiOrders
+  interface "/orders/{id}/invoice" as ApiInvoice
+  interface "/orders/{id}/ticket" as ApiTicket
+  interface "/orders/{id}/email-ticket" as ApiEmailTicket
+  interface "/metrics" as ApiMetrics
+}
+
+Guest --> LoginPage
+LoginPage --> LoginForm
+LoginPage --> AuthService
+VerifyPage --> VerifyForm
+VerifyPage --> AuthService
+
+Routes --> GuestGuard
+Routes --> AuthGuard
+Routes --> RoleGuard
+AuthGuard --> TokenStorage
+RoleGuard --> TokenStorage
+GuestGuard --> TokenStorage
+AuthInterceptor --> TokenStorage
+
+Admin --> AdminIndex
+AdminIndex --> MetricsPage
+AdminIndex --> ProductsPage
+AdminIndex --> UsersPage
+AdminIndex --> OrdersPage
+AdminIndex --> SuppliersPage
+AdminIndex --> TokenStorage
+
+MetricsPage --> MetricService
+MetricsPage --> SummaryMetrics
+MetricsPage --> TopProductsMetrics
+MetricsPage --> PaymentMetrics
+MetricsPage --> LowStockMetrics
+
+ProductsPage --> ProductService
+ProductsPage --> CategoryService
+ProductsPage --> SupplierService
+ProductsPage --> SearchBox
+ProductsPage --> ProductDialog
+ProductsPage --> ConfirmDialog
+
+UsersPage --> UserService
+UsersPage --> SearchBox
+UsersPage --> UserDialog
+UsersPage --> ConfirmDialog
+
+OrdersPage --> OrderService
+OrdersPage --> SearchBox
+OrdersPage --> OrderDialog
+OrdersPage --> ConfirmDialog
+OrdersPage --> ApiInvoice
+OrdersPage --> ApiTicket
+
+SuppliersPage --> SupplierService
+SuppliersPage --> SearchBox
+SuppliersPage --> SupplierDialog
+SuppliersPage --> ConfirmDialog
+
+Cashier --> CashierPage
+CashierPage --> CashierHeader
+CashierPage --> ProductSearch
+CashierPage --> BarcodeInput
+CashierPage --> ProductList
+CashierPage --> CartComponent
+CashierPage --> CartService
+
+ProductList --> ProductService
+ProductList --> CartService
+CartComponent --> CartService
+CartComponent --> OrderService
+CartComponent --> TokenStorage
+CartComponent --> TicketDialog
+TicketDialog --> OrderService
+
+AuthService --> ApiLogin
+AuthService --> Api2FA
+AuthService --> ApiMe
+AuthService --> TokenStorage
+
+ProductService --> ApiProducts
+CategoryService --> ApiCategories
+SupplierService --> ApiSuppliers
+UserService --> ApiUsers
+OrderService --> ApiOrders
+OrderService --> ApiInvoice
+OrderService --> ApiTicket
+OrderService --> ApiEmailTicket
+MetricService --> ApiMetrics
+
+CartService --> ProductService
+CartService --> ApiOrders : buildOrderPayload()
+
+note right of Routes
+Rutas reales:
+- /login
+- /verify-2fa
+- /admin/dashboard
+- /admin/products
+- /admin/users
+- /admin/orders
+- /admin/suppliers
+- /cashier
+end note
+
+note bottom of CartService
+TPV:
+buscar/listar productos,
+añadir por click o código de barras,
+gestionar carrito,
+crear pedido completed,
+descargar/enviar ticket.
+end note
+
+@enduml

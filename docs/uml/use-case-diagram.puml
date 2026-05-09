@@ -1,0 +1,57 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrador" as Admin
+actor "Cajero" as Cashier
+
+rectangle "Sistema de gestión de supermercado" {
+  usecase "Iniciar sesión" as UC_Login
+  usecase "Verificar doble factor" as UC_2FA
+  usecase "Cerrar sesión" as UC_Logout
+
+  usecase "Ver dashboard" as UC_Dashboard
+  usecase "Ver métricas de tienda" as UC_Metrics
+
+  usecase "Gestionar productos" as UC_Products
+  usecase "Gestionar proveedores" as UC_Suppliers
+  usecase "Gestionar usuarios" as UC_Users
+  usecase "Gestionar pedidos" as UC_Orders
+
+  usecase "Consultar productos" as UC_SearchProducts
+  usecase "Crear pedido desde TPV" as UC_CreateOrder
+  usecase "Añadir productos al carrito" as UC_Cart
+  usecase "Seleccionar método de pago" as UC_Payment
+  usecase "Generar ticket" as UC_Ticket
+  usecase "Recuperar ticket de pedido" as UC_RecoverTicket
+  usecase "Generar factura simplificada" as UC_Invoice
+}
+
+Admin --> UC_Login
+Cashier --> UC_Login
+
+UC_Login ..> UC_2FA
+
+Admin --> UC_Logout
+Cashier --> UC_Logout
+
+Admin --> UC_Dashboard
+Admin --> UC_Metrics
+Admin --> UC_Products
+Admin --> UC_Suppliers
+Admin --> UC_Users
+Admin --> UC_Orders
+Admin --> UC_RecoverTicket
+Admin --> UC_Invoice
+
+Cashier --> UC_SearchProducts
+Cashier --> UC_CreateOrder
+
+UC_CreateOrder ..> UC_Cart
+UC_CreateOrder ..> UC_Payment
+UC_CreateOrder ..> UC_Ticket
+
+UC_Orders ..> UC_RecoverTicket
+UC_Orders ..> UC_Invoice
+
+@enduml
